@@ -1,18 +1,18 @@
 var roleHarvester = require('role.harvester');
-var roleUpgrader = require('role.upgrader.js');
-var roleUpgraderRemote = require('role.upgraderRemote.js');
-var roleRoadworker = require('role.roadworker.js');
-var roleWorker = require('role.worker.js');
-var roleAttacker = require('role.attacker.js');
-var roleHealer = require('role.healer.js');
-var roleClaimer = require('role.claimer.js');
-var roleTower = require('role.tower.js');
-var roleContainerFiller = require('role.containerFiller.js');
-var roleContainerDistributor = require('role.containerDistributor.js');
-var roleLinkPuller = require('role.linkPuller.js');
-var roleLinkFiller = require('role.linkFiller.js');
-var roleDropper = require('role.dropper.js');
-var roomManager = require('room.manager.js');
+var roleUpgrader = require('role.upgrader');
+var roleUpgraderRemote = require('role.upgraderRemote');
+var roleRoadworker = require('role.roadworker');
+var roleWorker = require('role.worker');
+var roleAttacker = require('role.attacker');
+var roleHealer = require('role.healer');
+var roleClaimer = require('role.claimer');
+var roleTower = require('role.tower');
+var roleContainerFiller = require('role.containerFiller');
+var roleContainerDistributor = require('role.containerDistributor');
+var roleLinkPuller = require('role.linkPuller');
+var roleLinkFiller = require('role.linkFiller');
+var roleDropper = require('role.dropper');
+var roomManager = require('room.manager');
 
 
 
