@@ -1,4 +1,4 @@
-var roleHarvester = require('role.harvester.js');
+var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader.js');
 var roleUpgraderRemote = require('role.upgraderRemote.js');
 var roleRoadworker = require('role.roadworker.js');
@@ -227,8 +227,8 @@ module.exports.loop = function () {
 //            {role: 'harvester', name: 'H311', bodyparts: [WORK,WORK,CARRY,MOVE]},
             {role: 'harvester', name: 'H312', bodyparts: [WORK,WORK,CARRY,MOVE]},
             {role: 'harvester', name: 'H312', bodyparts: [WORK,CARRY,CARRY,MOVE,MOVE]},
-            {role: 'dropper', name: 'D311', sourceflagName: 'B13', bodyparts: [WORK,WORK,CARRY,MOVE]},
-            {role: 'dropper', name: 'D312', sourceflagName: 'B14', bodyparts: [WORK,WORK,CARRY,MOVE]},
+            {role: 'dropper', name: 'D311', sourceflagName: 'B13', bodyparts: [WORK,WORK,WORK,CARRY,MOVE]},
+            {role: 'dropper', name: 'D312', sourceflagName: 'B14', bodyparts: [WORK,WORK,WORK,CARRY,MOVE]},
             {role: 'roadworker', name: 'R111', bodyparts: [WORK,WORK,CARRY,MOVE]},
             {role: 'upgrader', name: 'U312', bodyparts: [WORK,WORK,CARRY,MOVE,MOVE]},
 //            {role: 'upgrader', name: 'U311', bodyparts: [WORK,WORK,CARRY,MOVE,MOVE]},
