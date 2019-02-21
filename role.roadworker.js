@@ -2,28 +2,83 @@ var roleRoadworker = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
+ if ((creep.hits < creep.hitsMax) && Game.rooms[creep.memory.spawnRoomName]) {
+     creep.say("flee")
+    creep.moveTo(Game.rooms[creep.memory.spawnRoomName].controller)
+    return (0)
+    }
+  if (creep.room.name == 'W47N45' && creep.pos.x <= 13 ){
+//  creep.moveTo(24,37)
+//    return(0)
+  }
+if (creep.room.name == 'W45N43' && creep.pos.x <= 5 ){
+  creep.moveTo(11,36)
+    return(0)
+  }
+    creep.memory.moveToController = Math.max(creep.memory.moveToController - 1, 0);
 
-		var site = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES)
-		var repairSite = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+        if (creep.pos.x <= 1 ){
+//            if (creep.move(BOTTOM_RIGHT) != OK) creep.move(BOTTOM)
+//            return(0)
+        }
+
+    if (creep.memory.sf && (!Game.flags[creep.memory.sf].room || creep.room.name != Game.flags[creep.memory.sf].room.name)){
+//        console.log(creep.name+" room: "+ Game.rooms[creep.memory.room])
+        var exit = creep.room.findExitTo(creep.memory.room);
+//        console.log(creep.name+" exit: "+ exit)
+        creep.moveTo(creep.pos.findClosestByRange(exit), {visualizePathStyle: {stroke: '#00ffff'}});
+//      creep.moveTo(creep.memory.sf)
+        return(0)
+    }
+
+    if (creep.memory.moveToController || (!creep.memory.sf && creep.memory.spawnRoomName && creep.room.name != creep.memory.spawnRoomName)) { creep.memory.moveToController = creep.memory.moveToController-1; creep.moveTo(Game.rooms[creep.memory.spawnRoomName].controller); return(0)}
+    if ((!creep.memory.sf && creep.memory.spawnRoomName && creep.room.name != creep.memory.spawnRoomName)) {creep.memory.moveToController=10;    }
+
+
+		var site = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
 		filter: function(object){
-//			return (/*object.structureType == STRUCTURE_ROAD ||*/ (object.structureType == STRUCTURE_CONTAINER || object.structureType == STRUCTURE_TOWER  ) && (object.hits < (object.hitsMax-500))/* || (object.structureType == STRUCTURE_WALL|| object.structureType == STRUCTURE_RAMPART) && (object.hits < (1000))*/);
-			return ((object.structureType == STRUCTURE_ROAD || object.structureType == STRUCTURE_CONTAINER || object.structureType == STRUCTURE_TOWER  ) && (object.hits < (object.hitsMax-400))) || ((object.structureType == STRUCTURE_WALL|| object.structureType == STRUCTURE_RAMPART) && (object.hits < (100)));
+            return (true)
+//          return (false)
+//			return ( (object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_SPAWN) );
+		   }
+		})
+		var repairSite = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+		filter: function(object){
+			return ((object.structureType == STRUCTURE_ROAD || object.structureType == STRUCTURE_CONTAINER || object.structureType == STRUCTURE_TOWER  ) && (object.hits < (object.hitsMax-300))) || ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART) && (object.hits < (30000)));
 		   }
 		});
+		if (!repairSite){
+    		var repairSite = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+    		filter: function(object){
+    			return  ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART) && (object.hits < (100000)));
+    		   }
+    		});
+		}
+		if (!repairSite){
+    		var repairSite = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+    		filter: function(object){
+    			return  ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART) && (object.hits < (300000)));
+    		   }
+    		});
+		}
+		if (!repairSite){
+    		var repairSite = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+    		filter: function(object){
+    			return  ((object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_RAMPART) && (object.hits < (2000000)));
+    		   }
+    		});
+		}
+		if (!repairSite){
+    		var repairSite = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+    		filter: function(object){
+    			return  ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART) && (object.hits < (4000000)));
+    		   }
+    		});
+		}
 
-                         if (creep.name == 'Roadworker8142292') console.log("test", repairSite, " hits ", repairSite.hits )
 
 
-		var containerSite = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-		filter: function(object){
-			return (object.structureType === STRUCTURE_CONTAINER && object.store.energy < object.storeCapacity);
-		   }
-		});
-		var containerFull = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-		filter: function(object){
-			return ((object.structureType == STRUCTURE_EXTENSION && object.energy > 0 ) ||  ( object.structureType === STRUCTURE_CONTAINER && object.store.energy > 0) ||  ( object.structureType === STRUCTURE_STORAGE && object.store.energy > 0));
-		   }
-		});
+
 //		containerFull=undefined
 //	console.log(creep.memory.state)
 //console.log(creep.memory.state)
@@ -47,13 +102,29 @@ var roleRoadworker = {
             if (creep.name == 'Roadworker8142292') console.log("test", creep.memory.state)
 
 		if (creep.memory.state == 'Load'){
-
+    		var containerFull = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+    		filter: function(object){
+    			return ((object.structureType == STRUCTURE_EXTENSION && object.energy > 500 ) ||  ( object.structureType === STRUCTURE_CONTAINER && object.store.energy > 100) ||  ( object.structureType === STRUCTURE_STORAGE && object.store.energy > 1000));
+//    			return ((object.structureType == STRUCTURE_EXTENSION && object.energy > 5 ) ||  ( object.structureType === STRUCTURE_TOWER && object.energy > 10) );
+    		   }
+    		});
             if (containerFull){
                     if(creep.withdraw(containerFull, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(containerFull, {visualizePathStyle: {stroke: '#00ffff'}});
         		    }
             } else {
-                var source = creep.pos.findClosestByPath(FIND_SOURCES);
+
+                var energies = creep.room.find(FIND_DROPPED_RESOURCES, {filter: function(object){return object.room.name == creep.room.name && object.resourceType==RESOURCE_ENERGY && object.amount >= 50}});
+                var energy = energies.reduce((maxEnergy, nextEnergy) => (maxEnergy && maxEnergy.amount > nextEnergy.amount)?maxEnergy:nextEnergy, undefined)
+//                energy = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES);
+    energy = undefined
+    //            var energy = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {filter: function(object){return object.room.name == creep.room.name && object.resourceType==RESOURCE_ENERGY && object.amount >= 50}});
+                if (energy){
+                    if (creep.pickup(energy) == ERR_NOT_IN_RANGE) creep.moveTo(energy,  {visualizePathStyle: {stroke: '#00ffff'}})
+                    return(0)
+                }
+
+                var source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
                 if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
                      creep.moveTo(source, {visualizePathStyle: {stroke: '#00ffff'}})
                 }
@@ -63,8 +134,10 @@ var roleRoadworker = {
 		else if (creep.memory.state == 'Build'){
 
         if (site)
+
                 if (creep.build(site) == ERR_NOT_IN_RANGE)
-                      creep.moveTo(site, {visualizePathStyle: {stroke: '#00ffff'}})
+                    creep.moveTo(site, {visualizePathStyle: {stroke: '#00ffff'}})
+
 		}
 		else if (creep.memory.state == 'Repair'){
 
@@ -81,6 +154,11 @@ var roleRoadworker = {
                 creep.moveTo(24,38)
 //            }
 
+    		var containerSite = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+    		filter: function(object){
+    			return (object.structureType === STRUCTURE_CONTAINER && object.store.energy < object.storeCapacity) || ((object.structureType === STRUCTURE_LINK  ) && object.energy > 0 );
+    		   }
+    		});
             if (creep.repair(containerSite) == ERR_NOT_IN_RANGE)
              creep.moveTo(containerSite)
 	    }

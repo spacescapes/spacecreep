@@ -5,7 +5,8 @@ var roleContainerDistributor = {
 
 		var containerSites = creep.room.find(FIND_STRUCTURES, {
 		filter: function(object){
-			return (object.structureType === STRUCTURE_CONTAINER /* || object.structureType === STRUCTURE_STORAGE */ /*&& object.store.energy < object.storeCapacity */);
+
+			return (object.structureType == STRUCTURE_CONTAINER  /*|| object.structureType === STRUCTURE_STORAGE */ /*&& object.store.energy < object.storeCapacity */);
 		   }
 		});
 
@@ -16,15 +17,24 @@ var roleContainerDistributor = {
                 }
 
         } else {
+
             if(!creep.memory.containerSiteMinId){
-                creep.memory.containerSiteMinId = _.min((_.filter(containerSites, ((a) => a.store.energy <= 2000))), ((a) => (a.store.energy - (creep.pos.getRangeTo(a)*2)))).id;
+                creep.memory.containerSiteMinId = _.min((_.filter(containerSites, ((a) => a.store.energy < 1700))), ((a) => (a.store.energy - (creep.pos.getRangeTo(a)*2)))).id;
             }
 
             var containerSiteMin = Game.getObjectById(creep.memory.containerSiteMinId)
 
-            var storage =  creep.pos.findClosestByRange(FIND_STRUCTURES, {
+            if (!containerSiteMin)    {
+                containerSiteMin =  creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+            		filter: function(object){
+            			return (object.structureType === STRUCTURE_STORAGE );
+            		   }
+            		});
+            }
+
+            var storage =  creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
         		filter: function(object){
-        			return (object.structureType === STRUCTURE_STORAGE && object.store.energy < 60000);
+        			return (object.structureType === STRUCTURE_STORAGE && object.store.energy < 100000);
         		   }
         		});
             if (storage) containerSiteMin = storage

@@ -1,33 +1,37 @@
 var roleTower = {
 
     /** @param {Creep} creep **/
-    run: function(towerId) {
+    run: function(tower) {
+//if (tower.room.name=='W55S41') {return(0)}
 
-//            Memory.repair=true
-        const targets = Game.getObjectById(towerId).room.find(FIND_HOSTILE_CREEPS);
+        const healTargets = tower.room.find(FIND_MY_CREEPS,{filter: function(creep){return creep.hits<(creep.hitsMax)} });
+
+     if(healTargets.length > 0) {
+         tower.heal(healTargets[0])
+         return(0)
+
+     }
+//            tower.room.memory.repair=true
+        var targets = tower.room.find(FIND_HOSTILE_CREEPS,{filter: function(creep){return (!(creep.owner.username == 'iceburg') && !creep.name.startsWith('siege') )} });
+//         targets = tower.room.find(FIND_STRUCTURES,{filter: function(creep){return creep.id == '5bd8939bd059f7206dd54772'} });
         if(targets.length > 0) {
-            var attackResult = Game.getObjectById(towerId).attack(targets[0]);
-            console.log("Attack: ", attackResult)
-        } else if(Memory.repair){
-    		var repairSite = Game.getObjectById(towerId).pos.findClosestByPath(FIND_STRUCTURES, {
+            var attackResult = tower.attack(targets[0]);
+
+            console.log("Attack: ", attackResult, targets[0], " ",  JSON.stringify(tower.owner))
+        } else if(tower.room.memory.repair){
+    		var repairSite = tower.pos.findClosestByRange(FIND_STRUCTURES, {
     		filter: function(object){
-    			return ((object.structureType === STRUCTURE_ROAD || object.structureType === STRUCTURE_CONTAINER || object.structureType == STRUCTURE_TOWER ) && (object.hits < (object.hitsMax-200)) || ( object.structureType == STRUCTURE_RAMPART) && (object.hits < (35000))  || ( object.structureType == STRUCTURE_WALL) && (object.hits < (7000)));
+    			return ((object.structureType === STRUCTURE_ROAD || object.structureType == STRUCTURE_TOWER ) && (object.hits < (object.hitsMax-1000)) || ((object.structureType === STRUCTURE_CONTAINER) && (object.hits < (object.hitsMax-10000))) || ( object.structureType == STRUCTURE_RAMPART) && (object.hits < (100000))  || ( object.structureType == STRUCTURE_WALL) && (object.hits < (5900)));
     		   }
     		})
-            if (!repairSite) Memory.repair = false
-    	} else {
-    		var repairSite = Game.getObjectById(towerId).pos.findClosestByPath(FIND_STRUCTURES, {
-    		filter: function(object){
-    			return ((object.structureType === STRUCTURE_ROAD || object.structureType === STRUCTURE_CONTAINER || object.structureType == STRUCTURE_TOWER ) && (object.hits < (object.hitsMax-500)) || (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART) && (object.hits < (7000)));
-    		   }
-    		});
-            if (repairSite) Memory.repair = true
+
+
+            if (repairSite) {
+                tower.repair(repairSite)
+            } else {
+                tower.room.memory.repair = false
+            }
     	}
-
-//    console.log("repair: ", Memory.repair)
-
-    Game.getObjectById(towerId).repair(repairSite)
-
 
 	}
 };
