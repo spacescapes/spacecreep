@@ -209,6 +209,7 @@ if (Game.time % 100 == 1){
 //                        'He511': {role: 'healer', sf: 'A5', follow:'A511', bodyparts: mainHelper.getBody(7,TOUGH,1,HEAL,4,MOVE,), required:true},
                         }
                         }
+//                        {name: "remoteConstruction", room: 'W39N44', sf: 'C4', copy: 2},
 //                        {name: "collector"},
 //                        {name: "worker"}
                         ]
@@ -347,7 +348,7 @@ if (Game.time % 100 == 1){
                     spawnMaps: [
                         {name: "baseLorry", required: true},
                         {name: "upgrader", copy: 2},
-                        {name: "remoteHarvest", room: 'W38N49', copy: 1},
+                        {name: "remoteHarvest", room: 'W38N49', copy: 2},
                         {name: "remoteConstruction", room: 'W37N48', sf: 'C3', copy: 2},
                         ]
                 }
