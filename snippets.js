@@ -1,0 +1,1 @@
+for (var g in Game.constructionSites){Game.constructionSites[g].remove()}
