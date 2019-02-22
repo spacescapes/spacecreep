@@ -355,7 +355,7 @@ if (Game.time % 100 == 1){
                              creeps:{
                                  'A61': {role: 'attacker', sf: 'A1', ar: 40, copy: 3, bodyparts: mainHelper.getBody(4,TOUGH,4,ATTACK,4,MOVE)},
                              }},
-                         },
+
                         ]
                 }
             },
