@@ -93,7 +93,7 @@ module.exports = {
 
        // Game.market.deal(maxOrder.id, 5000, 'W51N49')
 
-//        var dealResult = Game.market.deal(order.id, 10, 'W48N51')   // bei 100 in 4 Tagen 400k verbrauch  (585k nach 4 tagen fülgrad)
+//        var dealResult = Game.market.deal(order.id, 10, 'W48N51')   // bei 100 in 4 Tagen 400k verbrauch  (585k nach 4 tagen fÃ¼lgrad)
 
         var dealResult
 

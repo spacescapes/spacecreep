@@ -118,7 +118,7 @@ var roomManager = {
         } else if (spawnMapName == 'roadworker'){
             for (i=1;i<=spawnConfiguration.copy;i++){
                 baseMap['XR-'+spawnMapName+'-'+i+'-'+room.name]=
-                    {role: 'roadworker', bodyparts: this.baseBodies('roadworker', room.energyCapacityAvailable), autoSpawn: true, required: spawnConfiguration.required }
+                    {role: 'roadworker', sf: spawnConfiguration.sf,  room: spawnConfiguration.room, bodyparts: this.baseBodies('roadworker', room.energyCapacityAvailable), autoSpawn: true, required: spawnConfiguration.required }
             }
         } else if (spawnMapName == 'labworker'){
             for (i=1;i<=spawnConfiguration.copy;i++){

@@ -320,23 +320,26 @@ if (Game.time % 100 == 1){
                         {name: "remoteHarvest", room: 'W41N42', copy: 1},
                         {name: "remoteHarvest", room: 'W41N43', copy: 1},
                         {name: "remoteHarvest", room: 'W41N44', copy: 1},
+                        {name: "roadworker", copy: 2, sf: 'C6'},
+
 //                        {name: "remoteHarvest", room: 'W41N44', copy: 1},
 //                        {name: "remoteConstruction", room: 'W38N38', sf: 'C9', copy: 2},
-                        {name: "remoteConstruction", room: 'W42N35', sf: 'C2', copy: 2},
+//                        {name: "remoteConstruction", room: 'W42N35', sf: 'C2', copy: 2},
+//                        {name: "remoteConstruction", room: 'W43N43', sf: 'C6', copy: 2},
                         ]
                 }
             },
-            W38N38:
+            W42N35:
             {
                 room: {
                     construct: true,
                     roads: false,
                     spawnMaps: [
                         {name: "baseLorry", required: true},
-                        {name: "upgrader", copy: 1},
-                        {name: "remoteHarvest", room: 'W38N37', copy: 1},
-                        {name: "remoteHarvest", room: 'W38N39', copy: 1},
-                        {name: "remoteConstruction", room: 'W32N38', sf: 'C1', copy: 2},
+                        {name: "upgrader", copy: 2},
+//                        {name: "remoteHarvest", room: 'W38N37', copy: 1},
+//                        {name: "remoteHarvest", room: 'W38N39', copy: 1},
+                        {name: "remoteHarvest", room: 'W43N35', copy: 1},
                         ]
                 }
             },
@@ -349,11 +352,15 @@ if (Game.time % 100 == 1){
                         {name: "baseLorry", required: true},
                         {name: "upgrader", copy: 2},
                         {name: "remoteHarvest", room: 'W38N49', copy: 2},
-//                        {name: "remoteConstruction", room: 'W37N48', sf: 'C3', copy: 2},
+//                        {name: "roadworker", copy: 2, sf: 'C5'},
+//                        {name: "remoteConstruction", room: 'W42N43', sf: 'C5', copy: 1},
+//                        {name: "remoteConstruction", room: 'W43N43', sf: 'C6', copy: 1},
+//                        {name: "remoteConstruction", room: 'W38N38', sf: 'C9', copy: 1},
+                        {name: "remoteConstruction", room: 'W37N48', sf: 'C3', copy: 2},
                         { name: "custom",
 
                              creeps:{
-                                 'A61': {role: 'attacker', sf: 'A1', ar: 40, copy: 3, bodyparts: mainHelper.getBody(4,TOUGH,4,ATTACK,4,MOVE)},
+//                                 'A61': {role: 'attacker', sf: 'A1', ar: 40, copy: 3, bodyparts: mainHelper.getBody(4,TOUGH,4,ATTACK,4,MOVE)},
                              }},
 
                         ]
