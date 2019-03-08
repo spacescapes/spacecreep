@@ -320,6 +320,7 @@ if (Game.time % 100 == 1){
                         {name: "remoteHarvest", room: 'W41N42', copy: 1},
                         {name: "remoteHarvest", room: 'W41N43', copy: 1},
                         {name: "remoteHarvest", room: 'W41N44', copy: 1},
+                        {name: "remoteHarvest", room: 'W42N42', copy: 1},
                         {name: "roadworker", copy: 2, sf: 'C6'},
 
 //                        {name: "remoteHarvest", room: 'W41N44', copy: 1},
@@ -396,6 +397,7 @@ if (Game.time % 100 == 1){
                         {name: "upgrader", copy: 1},
                         {name: "roadworker", copy: 1},
                         {name: "remoteHarvest", room: 'W43N32', copy: 1},
+                        {name: "remoteHarvest", room: 'W42N31', copy: 1},
                         ]
                 }
             },
