@@ -25,7 +25,7 @@ Memory.ta={}
 module.exports.loop = function () {
     console.log("-------------")
 if (Game.time % 100 == 1){
-    return(0)
+//    return(0)
 }
 /*
     if (false){
@@ -336,10 +336,17 @@ if (Game.time % 100 == 1){
                     roads: false,
                     spawnMaps: [
                         {name: "baseLorry", required: true},
-                        {name: "upgrader", copy: 2},
+                        {name: "upgrader", copy: 3},
 //                        {name: "remoteHarvest", room: 'W38N37', copy: 1},
 //                        {name: "remoteHarvest", room: 'W38N39', copy: 1},
                         {name: "remoteHarvest", room: 'W43N35', copy: 1},
+//                        {name: "remoteConstruction", room: 'W42N32', sf: 'C9', copy: 1},
+                        { name: "custom",
+
+                          creeps:{
+
+                            'A64': {role: 'attacker',  ar: 40, copy:1, bodyparts: mainHelper.getBody(4,TOUGH,4,ATTACK,4,MOVE)},
+                          }}
                         ]
                 }
             },
@@ -363,6 +370,32 @@ if (Game.time % 100 == 1){
 //                                 'A61': {role: 'attacker', sf: 'A1', ar: 40, copy: 3, bodyparts: mainHelper.getBody(4,TOUGH,4,ATTACK,4,MOVE)},
                              }},
 
+                        ]
+                }
+            },
+            W37N48:
+            {
+                room: {
+                    construct: true,
+                    roads: false,
+                    spawnMaps: [
+                        {name: "baseLorry", required: true},
+                        {name: "upgrader", copy: 2},
+                        {name: "roadworker", copy: 1},
+                        {name: "remoteHarvest", room: 'W37N49', copy: 2},
+                        ]
+                }
+            },
+            W42N32:
+            {
+                room: {
+                    construct: true,
+                    roads: false,
+                    spawnMaps: [
+                        {name: "baseLorry", required: true},
+                        {name: "upgrader", copy: 1},
+                        {name: "roadworker", copy: 1},
+                        {name: "remoteHarvest", room: 'W43N32', copy: 1},
                         ]
                 }
             },
