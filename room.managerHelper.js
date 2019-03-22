@@ -112,65 +112,65 @@ module.exports = {
 
     equipRoom: function(room){
 
-    var create="buildx"
-    if (Game.time % 50 == 0){
-        create = "build"
-    }
-    var createRoom = 'W48N54'
-    if (create=='build' /* && room.name == createRoom*/){
-//      if (spawnMapEntry.room.construct){
-
-        var spawn = room.find(FIND_STRUCTURES, {filter: function(c){return( c.structureType == STRUCTURE_SPAWN)}})[0]
-/*
-        var es = spawn.pos.findInRange(FIND_STRUCTURES, 2, {filter: function(c){return (c.structureType == STRUCTURE_EXTENSION)}})
-        es.forEach((e)=>{
-                    console.log("e:"+e)
-            var earounds = e.pos.findInRange(FIND_STRUCTURES, 1, {filter: function(c){return (c.structureType == STRUCTURE_EXTENSION)}})
-            if (earounds.length==0){
-
-            }
-        })
-        console.log("e:"+es.length)
-      */
-
-        for (var yoffset = -4; yoffset <= 5;yoffset++ ){
-            for (var xoffset = -5; xoffset <= 5;xoffset++ ){
-                this.createExtensionGroup(room, spawn.pos.x+xoffset, spawn.pos.y+yoffset)
-
-            }
-
+        var create="buildx"
+        if (Game.time % 50 == 0){
+            create = "build"
         }
+        var createRoom = 'W48N54'
+        if (create=='build' /* && room.name == createRoom*/){
+    //      if (spawnMapEntry.room.construct){
 
-/*
-        room.find(FIND_SOURCES).forEach((object)=>{
-            this.createRoad(room, room.controller.pos, object.pos)
-            room.find(FIND_SOURCES).forEach((object2)=>{
-                this.createRoad(room, object2.pos, object.pos)
+            var spawn = room.find(FIND_STRUCTURES, {filter: function(c){return( c.structureType == STRUCTURE_SPAWN)}})[0]
+    /*
+            var es = spawn.pos.findInRange(FIND_STRUCTURES, 2, {filter: function(c){return (c.structureType == STRUCTURE_EXTENSION)}})
+            es.forEach((e)=>{
+                        console.log("e:"+e)
+                var earounds = e.pos.findInRange(FIND_STRUCTURES, 1, {filter: function(c){return (c.structureType == STRUCTURE_EXTENSION)}})
+                if (earounds.length==0){
+
+                }
             })
-        })
-        room.find(FIND_CONSTRUCTION_SITES).forEach((object)=>{
-            if (object.structureType == STRUCTURE_SPAWN){
-                room.find(FIND_SOURCES).forEach((object2)=>{
-                    this.createRoad(room, object.pos, object2.pos)
-                    this.createRoad(room, object2.pos, room.controller.pos)
-                })
-                this.createRoad(room, object.pos, room.controller.pos)
+            console.log("e:"+es.length)
+          */
+
+            for (var yoffset = -4; yoffset <= 5;yoffset++ ){
+                for (var xoffset = -5; xoffset <= 5;xoffset++ ){
+                    this.createExtensionGroup(room, spawn.pos.x+xoffset, spawn.pos.y+yoffset)
+
+                }
+
             }
-        })
-*/
+
+    /*
+            room.find(FIND_SOURCES).forEach((object)=>{
+                this.createRoad(room, room.controller.pos, object.pos)
+                room.find(FIND_SOURCES).forEach((object2)=>{
+                    this.createRoad(room, object2.pos, object.pos)
+                })
+            })
+            room.find(FIND_CONSTRUCTION_SITES).forEach((object)=>{
+                if (object.structureType == STRUCTURE_SPAWN){
+                    room.find(FIND_SOURCES).forEach((object2)=>{
+                        this.createRoad(room, object.pos, object2.pos)
+                        this.createRoad(room, object2.pos, room.controller.pos)
+                    })
+                    this.createRoad(room, object.pos, room.controller.pos)
+                }
+            })
+    */
     }
 
-    if (create=='delete'  && room.name == createRoom){
+        if (create=='delete'  && room.name == createRoom){
 
-            room.find(FIND_CONSTRUCTION_SITES).forEach((c)=>{if ((c.structureType == STRUCTURE_ROAD || c.structureType == STRUCTURE_EXTENSION ) && c.progress < 1){c.remove() }})
+                room.find(FIND_CONSTRUCTION_SITES).forEach((c)=>{if ((c.structureType == STRUCTURE_ROAD || c.structureType == STRUCTURE_EXTENSION ) && c.progress < 1){c.remove() }})
 
-        }
+            }
 
-    //    console.log("CONStruCT: "+ room.createConstructionSite(new RoomPosition(26,24, room.name), STRUCTURE_SPAWN))
-    //return(0)
-    //    var links = room.find(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_LINK}});
+        //    console.log("CONStruCT: "+ room.createConstructionSite(new RoomPosition(26,24, room.name), STRUCTURE_SPAWN))
+        //return(0)
+        //    var links = room.find(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_LINK}});
 
-    },
+        },
 
 
 };

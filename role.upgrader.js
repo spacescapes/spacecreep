@@ -4,7 +4,7 @@ var roleUpgrader = {
     run: function(creep) {
 
 
-//        return(0)
+        return(0)
 if (creep.room.name == 'W48N54x' && creep.ticksToLive > 1000 && (!creep.body.some((a)=>(a.boost))) && Game.getObjectById('5c14300f0bb15c5410d31755').mineralAmount > 100){
     creep.moveTo(Game.flags.L6)
 //    creep.moveTo(Game.spawns.Spawn7)
@@ -82,6 +82,14 @@ if (creep.room.name == 'W48N54x' && creep.ticksToLive > 1000 && (!creep.body.som
 //    		creep.say(linkSites.length)
     		if (linkSites.length > 0){
     		    containerSite = linkSites[0]
+    		}
+    		if (!containerSite) {
+        		containerSite = creep.pos.findClosestByPath(FIND_HOSTILE_STRUCTURES, {
+        		filter: function(object){
+        			return ((object.structureType == STRUCTURE_EXTENSION && object.energy > 0 ) ||  ( object.structureType === STRUCTURE_CONTAINER && object.store.energy > 100) || ( object.structureType === STRUCTURE_TOWER && object.energy > 0) ||  ( object.structureType === STRUCTURE_TERMINAL && object.store.energy > 100) ||  ( object.structureType === STRUCTURE_STORAGE && object.store.energy > 1000) ||  ( object.structureType === STRUCTURE_LINK && object.energy > 0) ||  ( object.structureType === STRUCTURE_SPAWN && object.energy > 0) ||  ( object.structureType === STRUCTURE_POWER_SPAWN && object.energy > 0) || ( object.structureType === STRUCTURE_LAB && object.energy > 0) );
+    //    			return ((object.structureType == STRUCTURE_EXTENSION && object.energy > 5 ) ||  ( object.structureType === STRUCTURE_TOWER && object.energy > 10) );
+        		   }
+        		});
     		}
             if (!containerSite) {
                 containerSite = creep.pos.findClosestByPath(FIND_STRUCTURES, {

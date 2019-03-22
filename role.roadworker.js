@@ -1,7 +1,6 @@
 var roleRoadworker = {
     /** @param {Creep} creep **/
     run: function(creep) {
-
  if ((creep.hits < creep.hitsMax) && Game.rooms[creep.memory.spawnRoomName]) {
      creep.say("flee")
     creep.moveTo(Game.rooms[creep.memory.spawnRoomName].controller)
@@ -101,13 +100,30 @@ if (creep.room.name == 'W45N43' && creep.pos.x <= 5 ){
 
             if (creep.name == 'Roadworker8142292') console.log("test", creep.memory.state)
 
+
 		if (creep.memory.state == 'Load'){
-    		var containerFull = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+    		var containerFull = creep.pos.findClosestByPath(FIND_HOSTILE_STRUCTURES, {
     		filter: function(object){
-    			return ((object.structureType == STRUCTURE_EXTENSION && object.energy > 500 ) ||  ( object.structureType === STRUCTURE_CONTAINER && object.store.energy > 100) ||  ( object.structureType === STRUCTURE_STORAGE && object.store.energy > 1000));
-//    			return ((object.structureType == STRUCTURE_EXTENSION && object.energy > 5 ) ||  ( object.structureType === STRUCTURE_TOWER && object.energy > 10) );
+    			return (object.structureType == STRUCTURE_EXTENSION && object.energy > 0 );
     		   }
+
     		});
+    		if (!containerFull){
+        		containerFull = creep.pos.findClosestByPath(FIND_HOSTILE_STRUCTURES, {
+        		filter: function(object){
+        			return ((object.structureType == STRUCTURE_EXTENSION && object.energy > 0 ) ||  ( object.structureType === STRUCTURE_CONTAINER && object.store.energy > 100) ||  ( object.structureType === STRUCTURE_TERMINAL && object.store.energy > 100) ||  ( object.structureType === STRUCTURE_STORAGE && object.store.energy > 1000) ||  ( object.structureType === STRUCTURE_LINK && object.energy > 0) ||  ( object.structureType === STRUCTURE_SPAWN && object.energy > 0) ||  ( object.structureType === STRUCTURE_POWER_SPAWN && object.energy > 0) || ( object.structureType === STRUCTURE_LAB && object.energy > 0)  || ( object.structureType === STRUCTURE_TOWER && object.energy > 0) );
+    //    			return ((object.structureType == STRUCTURE_EXTENSION && object.energy > 5 ) ||  ( object.structureType === STRUCTURE_TOWER && object.energy > 10) );
+        		   }
+        		});
+    		}
+    		if (!containerFull){
+        		var containerFull = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+        		filter: function(object){
+        			return ((object.structureType == STRUCTURE_EXTENSION && object.energy > 500 ) ||  ( object.structureType === STRUCTURE_CONTAINER && object.store.energy > 100) ||  ( object.structureType === STRUCTURE_STORAGE && object.store.energy > 1000));
+    //    			return ((object.structureType == STRUCTURE_EXTENSION && object.energy > 5 ) ||  ( object.structureType === STRUCTURE_TOWER && object.energy > 10) );
+        		   }
+        		});
+    		}
             if (containerFull){
                     if(creep.withdraw(containerFull, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(containerFull, {visualizePathStyle: {stroke: '#00ffff'}});

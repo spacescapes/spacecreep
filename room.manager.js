@@ -16,17 +16,22 @@ var roomManager = {
     storedSpawnMap: function(room, spawnMapName, spawnConfiguration) {
         if (spawnConfiguration.copy === undefined) spawnConfiguration.copy = 1
         var baseMap = {}
-
         if (spawnMapName == 'base'){
             var creepsInRoom = room.find(FIND_MY_CREEPS);
             var numberOfDroppers = _.sum(creepsInRoom, (c) => c.memory.role == "dropper");
             var numberOfHarvesters = _.sum(creepsInRoom, (c) => c.memory.role == "harvester");
+
             if (numberOfDroppers==0){
                 sources = room.find(FIND_SOURCES).sort(function(a, b){return a.id - b.id})
                 if (sources){
 //                console.log(source.id)
                     baseMap['XD-'+spawnMapName+'-0-'+room.name]=
                         {role: 'dropper', sId: sources[0].id, bodyparts: this.baseBodies('dropper', room.energyAvailable), autoSpawn: true, required: spawnConfiguration.required}
+                }
+            } else if (room.find(FIND_HOSTILE_CREEPS).length){
+                console.log("MY OWN ROOM " + room.name+"has enemy"+Game.rooms[room.name].find(FIND_HOSTILE_CREEPS).length)
+                baseMap  = {
+                    ['XA-'+room.name+'-1-']: {role: 'attacker', room: room.name, bodyparts: this.baseBodies('attackerWithHeal', room.energyAvailable), ar: 40, autoSpawn: true, required: spawnConfiguration.required },
                 }
             } else if (numberOfHarvesters<=1){
                 baseMap = ({
@@ -74,6 +79,11 @@ var roomManager = {
                     ['XO-'+spawnMapName+'-1-'+room.name]: {role: 'lorry', bodyparts: this.baseBodies('lorry', room.energyAvailable), autoSpawn: true, required: spawnConfiguration.required },
                     ['XO-'+spawnMapName+'-2-'+room.name]: {role: 'lorry', bodyparts: this.baseBodies('lorry', room.energyAvailable), autoSpawn: true, harvestThreshold: 200, required: spawnConfiguration.required },
                 })
+            } else if (room.find(FIND_HOSTILE_CREEPS).length){
+                console.log("MY OWN ROOM " + room.name+"has enemy"+Game.rooms[room.name].find(FIND_HOSTILE_CREEPS).length)
+                baseMap  = {
+                    ['XA-'+room.name+'-1-']: {role: 'attacker', room: room.name, bodyparts: this.baseBodies('attackerWithHeal', room.energyAvailable), ar: 40, autoSpawn: true, required: spawnConfiguration.required },
+                }
             } else {
                 baseMap = ({
                     ['XO-'+spawnMapName+'-1-'+room.name]: {role: 'lorry', bodyparts: this.baseBodies('lorry', room.energyCapacityAvailable-200), autoSpawn: true, required: spawnConfiguration.required },
@@ -88,7 +98,7 @@ var roomManager = {
 
 
             var baseMap2 = ({
-                ['XO-'+spawnMapName+'-3-'+room.name]: {role: 'lorry', bodyparts: this.baseBodies('lorry', room.energyCapacityAvailable-100), autoSpawn: true, harvestThreshold: 600, required: spawnConfiguration.required },
+//                ['XO-'+spawnMapName+'-3-'+room.name]: {role: 'lorry', bodyparts: this.baseBodies('lorry', room.energyCapacityAvailable-100), autoSpawn: true, harvestThreshold: 600, required: spawnConfiguration.required },
                 ['XU-'+spawnMapName+'-1-'+room.name]: {role: 'upgrader', bodyparts: this.baseBodies('upgrader', room.energyAvailable), autoSpawn: true, required: spawnConfiguration.required },
                 ['XR-'+spawnMapName+'-1-'+room.name]: {role: 'roadworker', bodyparts: this.baseBodies('roadworker', room.energyAvailable), autoSpawn: true, required: spawnConfiguration.required },
 //                ['XO-'+spawnMapName+'-4-'+room.name]: {role: 'lorry', bodyparts: this.baseBodies('lorry', room.energyCapacityAvailable-100), autoSpawn: true, harvestThreshold: 1000, required: spawnConfiguration.required },
@@ -158,7 +168,7 @@ var roomManager = {
             } else if (Game.rooms[spawnConfiguration.room].find(FIND_HOSTILE_CREEPS).length){
                 console.log(spawnConfiguration.room+"has enemy"+Game.rooms[spawnConfiguration.room].find(FIND_HOSTILE_CREEPS).length)
                 baseMap  = {
-                ['XA-'+spawnMapName+'-1-'+room.name+'-'+spawnConfiguration.room]: {role: 'attacker', room: spawnConfiguration.room, bodyparts: this.baseBodies('attacker', room.energyAvailable), ar: 40, autoSpawn: true, required: spawnConfiguration.required },
+                ['XA-'+spawnMapName+'-1-'+room.name+'-'+spawnConfiguration.room]: {role: 'attacker', room: spawnConfiguration.room, bodyparts: this.baseBodies('attackerWithHeal', room.energyAvailable), ar: 40, autoSpawn: true, required: spawnConfiguration.required },
 //                ['XA-'+spawnMapName+'-2-'+room.name+'-'+spawnConfiguration.room]: {role: 'attacker', room: spawnConfiguration.room, bodyparts: this.baseBodies('attacker', 500), ar: 40, autoSpawn: true, required: spawnConfiguration.required }
                 }
             }
@@ -197,11 +207,10 @@ var roomManager = {
                 })
 //                console.log("FOUND ROOM " +spawnConfiguration.room)
             }
-            baseMap['XU-'+spawnMapName+'2-'+room.name+'-'+spawnConfiguration.sf] =
-                {role: 'upgrader', sf: spawnConfiguration.sf, bodyparts: roomManager.baseBodies('roadworker', room.energyAvailable), required: spawnConfiguration.required}
-
 
             for (i=1;i<=spawnConfiguration.copy;i++){
+                baseMap['XU-'+spawnMapName+''+i+'-'+room.name+'-'+spawnConfiguration.sf] =
+                    {role: 'upgrader', sf: spawnConfiguration.sf, bodyparts: roomManager.baseBodies('roadworkerFast', room.energyAvailable), required: spawnConfiguration.required}
                 baseMap['XR-'+spawnMapName+''+i+'-'+room.name+'-'+spawnConfiguration.sf]=
                     {role: 'roadworker', sf: spawnConfiguration.sf, room: spawnConfiguration.room, bodyparts: this.baseBodies('roadworkerFast', room.energyCapacityAvailable), autoSpawn: true, required: spawnConfiguration.required}
             }
@@ -230,7 +239,7 @@ var roomManager = {
                     {energy: 400, body: mainHelper.getBody(2,WORK,2,CARRY,2,MOVE)},
                     {energy: 500, body: mainHelper.getBody(2,WORK,3,CARRY,3,MOVE)},
                     {energy: 650, body: mainHelper.getBody(3,WORK,3,CARRY,3,MOVE)},
-                    {energy: 850, body: mainHelper.getBody(5,WORK,3,CARRY,4,MOVE)}
+                    {energy: 900, body: mainHelper.getBody(5,WORK,3,CARRY,4,MOVE)}
                 ]
             },
             {
@@ -240,7 +249,8 @@ var roomManager = {
                     {energy: 400, body: mainHelper.getBody(2,WORK,1,CARRY,3,MOVE)},
                     {energy: 500, body: mainHelper.getBody(2,WORK,2,CARRY,4,MOVE)},
                     {energy: 600, body: mainHelper.getBody(2,WORK,3,CARRY,5,MOVE)},
-                    {energy: 750, body: mainHelper.getBody(3,WORK,3,CARRY,6,MOVE)}
+                    {energy: 750, body: mainHelper.getBody(3,WORK,3,CARRY,6,MOVE)},
+                    {energy: 1050, body: mainHelper.getBody(5,WORK,3,CARRY,8,MOVE)}
                 ]
             },
             {
@@ -313,7 +323,8 @@ var roomManager = {
                     {energy: 800, body: mainHelper.getBody(1,WORK,9,CARRY,5,MOVE)},
                     {energy: 950, body: mainHelper.getBody(1,WORK,11,CARRY,6,MOVE)},
                     {energy: 1100, body: mainHelper.getBody(1,WORK,13,CARRY,7,MOVE)},
-                    {energy: 1250, body: mainHelper.getBody(1,WORK,15,CARRY,8,MOVE)}
+                    {energy: 1250, body: mainHelper.getBody(1,WORK,15,CARRY,8,MOVE)},
+                    {energy: 1400, body: mainHelper.getBody(1,WORK,17,CARRY,9,MOVE)}
                 ]
             },
             {
@@ -325,13 +336,24 @@ var roomManager = {
                     {energy: 1400, spawnDelay: 200, body: mainHelper.getBody(2,CLAIM,2,MOVE)},
 
                 ]
-            },            {
+            },
+            {
                 role: 'attacker',
                 bodies: [
                     {energy: 0, body: mainHelper.getBody(1,ATTACK,1,MOVE)},
                     {energy: 300, body: mainHelper.getBody(2,ATTACK,2,MOVE)},
                     {energy: 600, body: mainHelper.getBody(4,ATTACK,4,MOVE)},
                     {energy: 900, body: mainHelper.getBody(6,ATTACK,6,MOVE)},
+
+                ]
+            },
+            {
+                role: 'attackerWithHeal',
+                bodies: [
+                    {energy: 0, body: mainHelper.getBody(1,ATTACK,1,MOVE)},
+                    {energy: 300, body: mainHelper.getBody(2,ATTACK,2,MOVE)},
+                    {energy: 850, body: mainHelper.getBody(4,ATTACK,4,MOVE,1,HEAL)},
+                    {energy: 1150, body: mainHelper.getBody(6,ATTACK,6,MOVE,1,HEAL)},
 
                 ]
             }
@@ -382,15 +404,17 @@ var roomManager = {
     })
 
     containers.forEach((c) => room.visual.text(
-            c.store.energy ,
+            c.store.energy,
             c.pos.x + 1, c.pos.y+1,
             {align: 'left', opacity: 0.7, font: 0.6}))
 
-    var links = room.find(FIND_STRUCTURES, {
+        var links = room.find(FIND_STRUCTURES, {
 		filter: function(object){
 			return ((object.structureType === STRUCTURE_LINK && object.cooldown == 0 ));
 		   }
 		});
+		var linksSend = links.map((link) => Memory.linkMode[link.id]=='send')
+		var linksReceive = links.map((link) => Memory.linkMode[link.id]!='send')
 
 	links.forEach((c) => room.visual.text(
             c.energy + " " + Memory.linkMode[c.id],

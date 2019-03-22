@@ -3,11 +3,12 @@ var roleAttacker = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
+//return(0)
 
     if (creep.memory.follower){
         var follower = Game.creeps[creep.memory.follower]
 //        if (!creep.pos.inRangeTo(master)){
-          if (follower && !creep.pos.inRangeTo(follower,1) && creep.pos.x > 1 && creep.pos.y > 1 && creep.pos.x < 48 && creep.pos.y < 48){
+          if (follower && !creep.pos.inRangeTo(follower,5) && creep.pos.x > 1 && creep.pos.y > 1 && creep.pos.x < 48 && creep.pos.y < 48){
             creep.moveTo(follower)
             return(0)
         }
@@ -32,7 +33,7 @@ var roleAttacker = {
             }
         }
 
-        if (creep.hits < (creep.hitsMax*0.4)) {
+        if ((creep.hits < (creep.hitsMax*0.4)) || ((creep.hits < creep.hitsMax) && (Game.time % 4 == 1) )) {
             if (creep.getActiveBodyparts(HEAL) >=1 ) {
                 creep.heal(creep)
             } else {

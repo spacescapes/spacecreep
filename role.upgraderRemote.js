@@ -33,12 +33,15 @@ var roleUpgraderRemote = {
          if(creep.carry.energy == 0) {
 //            console.log(Game.getObjectById(creep.memory.sId)+ " "+ creep.memory.sId)
 
+
             var energy = creep.pos.findInRange(FIND_DROPPED_RESOURCES,10);
-            if (energy.length > 0){
+
+            if ((creep.room.name == creep.memory.spawnRoomName && energy.length && energy[0].amount > 300) || (creep.room.name != creep.memory.spawnRoomName && energy.length && energy[0].amount > 100) ){
+                creep.say("energy")
                 if (creep.pickup(energy[0]) != OK) creep.moveTo(energy[0])
             } else {
                 if(!creep.pos.inRangeTo(sourceFlag,5)) {
-                    creep.moveTo(sourceFlag, {visualizePathStyle: {stroke: '#00ffff'}, reusePath: 30})
+                    creep.moveTo(sourceFlag, {visualizePathStyle: {stroke: '#00ffff'}})
                 } else {
 
 
@@ -73,7 +76,7 @@ var roleUpgraderRemote = {
         		});
         		if (creep.carry.energy <= creep.carryCapacity-10){
                     if (containerSite){
-                        creep.say("l cont")
+                        creep.say("L container")
                         if (creep.withdraw(containerSite, RESOURCE_ENERGY) != OK) {
                                 creep.moveTo(containerSite)
                                 return(0)
@@ -92,12 +95,12 @@ var roleUpgraderRemote = {
             	var repairSite = creep.pos.findClosestByPath(FIND_STRUCTURES, {
             		filter: function(object){
             			return ((object.structureType == STRUCTURE_ROAD && object.hits < (object.hitsMax) && creep.pos.inRangeTo(object, 0)) ||
-            			        ((object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER ) && object.hits < (object.hitsMax) && creep.pos.inRangeTo(object, 2)) );
+            			        ((object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_CONTAINER ) && object.hits < (object.hitsMax) && creep.pos.inRangeTo(object, 1)) );
             		   }
             		});
                 if (repairSite){
                     creep.repair(repairSite)
-                    if (repairSite.structureType == STRUCTURE_CONTAINER) {
+                    if (repairSite.structureType == STRUCTURE_CONTAINER || repairSite.structureType == STRUCTURE_ROAD) {
                         return(0)
                     }
                 }
@@ -106,7 +109,6 @@ var roleUpgraderRemote = {
             if(!targetFlag.room || creep.room.name != targetFlag.room.name) {
                 creep.moveTo(targetFlag, {visualizePathStyle: {stroke: '#00ffff'}, reusePath: 30})
             } else {
-
                 var containerSite = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                     filter: (structure) => {
                         return ((structure.structureType == STRUCTURE_CONTAINER || structure.structureType == STRUCTURE_STORAGE) && structure.store.energy < structure.storeCapacity) || ((structure.structureType == STRUCTURE_LINK || structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_TOWER) && structure.energy < structure.energyCapacity);

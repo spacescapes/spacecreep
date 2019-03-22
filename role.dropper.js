@@ -29,7 +29,7 @@ var roleDropper = {
             return(0)
         }
 
-        if(!creep.pos.inRangeTo(flag,1)) {
+        if(!creep.pos.inRangeTo(flag,2)) {
             creep.moveTo(flag, {visualizePathStyle: {stroke: '#00ffff'}})
             if (creep.room.controller && !creep.room.controller.my){
                 creep.room.createConstructionSite(creep.pos.x,creep.pos.y, STRUCTURE_ROAD)
@@ -65,6 +65,7 @@ var roleDropper = {
             		        }
             		    })
 
+
                     if (containerSite && creep.pos.getRangeTo(containerSite) < 3){
 
                         if ((containerSite.hits < containerSite.hitsMax) && creep.pos.inRangeTo(containerSite,5)){
@@ -72,22 +73,30 @@ var roleDropper = {
                         } else {
 //creep.say("store")
                             if(creep.transfer(containerSite, rescode) == ERR_NOT_IN_RANGE) {
-                                creep.moveTo(containerSite, {visualizePathStyle: {stroke: '#00ffff'}});
+            		    creep.moveTo(containerSite, {visualizePathStyle: {stroke: '#00ffff'}});
                             }
                         }
                     } else {
                         var buildSites = creep.pos.findInRange(FIND_CONSTRUCTION_SITES,3)
-                        if (buildSites.length == 0 && creep.pos.findInRange(FIND_STRUCTURES,3, {filter: function(a){return (a.structureType == STRUCTURE_CONTAINER)}}).length==0){
+                        if (buildSites.length == 0 && creep.pos.findInRange(FIND_STRUCTURES,3, {filter: function(a){return (a.structureType == STRUCTURE_CONTAINER || a.structureType == STRUCTURE_LINK)}}).length==0){
                             creep.say("construct")
 //                            console.log("construct", creep.name)
                             creep.room.createConstructionSite(creep.pos, STRUCTURE_CONTAINER)
 
                         } else {
-//                            creep.repair(creep.pos.findInRange(FIND_STRUCTURES,3, {filter: function(a){return (a.structureType == STRUCTURE_CONTAINER)}})[0])
-                            creep.say("drop")
-//                            console.log("drop", creep.name)
-                            creep.drop(rescode,5)
-
+                            var containerSite = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+            		            filter: function(object){
+            			         return  (object.structureType === STRUCTURE_CONTAINER && object.hits < object.hitsMax );
+            		            }
+            		         })
+            		         if (containerSite){
+            		             creep.repair(containerSite)
+            		         } else {
+    //                            creep.repair(creep.pos.findInRange(FIND_STRUCTURES,3, {filter: function(a){return (a.structureType == STRUCTURE_CONTAINER)}})[0])
+                                creep.say("drop")
+    //                            console.log("drop", creep.name)
+                                creep.drop(rescode,5)
+            		         }
 
                         }
 

@@ -4,24 +4,23 @@ var o = Object.create(meta);
 
     /** @param {Creep} creep **/
     o.run = function(creep) {
-        var terminals = creep.room.find(FIND_STRUCTURES, {filter: ((s)=>(s.structureType == STRUCTURE_TERMINAL))})
-        var terminal
-        if (terminals.length > 0) terminal = terminals[0]
+
+        var terminal = creep.room.terminal
 
         if (!terminal) return(0)
 
         if (!creep.room.storage) return(0)
-        var resourceList = [RESOURCE_ENERGY, RESOURCE_LEMERGIUM]
+        var resourceList = [RESOURCE_ENERGY, RESOURCE_LEMERGIUM, RESOURCE_KEANIUM]
         for (var r in resourceList){
-            creep.say(">>> "+resourceList[r])
+//            creep.say(">>> "+resourceList[r])
             var resource = resourceList[r]
 
-            if (terminal.store[resource] < 120000 ){
+            if ((resource == RESOURCE_ENERGY && creep.room.storage.store[resource] > 515000) || (resource != RESOURCE_ENERGY && creep.room.storage.store[resource] > 120000) ){
                 if (!creep.carry[resource] || creep.carry[resource] < creep.carryCapacity){
-//                    creep.say("E withdraw")
+                    creep.say(">s> "+resource)
                     this.moveAndWithdraw(creep, creep.room.storage, resource)
                 } else {
-//                    creep.say("E load")
+                    creep.say(resource + " >t>")
                     for(const resourceType in creep.carry) {
                         this.moveAndTransfer(creep, terminal, resourceType)
                     }
@@ -29,10 +28,10 @@ var o = Object.create(meta);
                 }
             } else if (terminal.store[resource] > 130000 ){
                 if (!creep.carry[resource] || creep.carry[resource] < creep.carryCapacity){
-//                    creep.say("E withdraw")
+                    creep.say(">t> "+resource)
                     this.moveAndWithdraw(creep, terminal, resource)
                 } else {
-                    creep.say(creep.carry[resource]+ " >>")
+                    creep.say(resource + " >s>")
                     for(const resourceType in creep.carry) {
                         this.moveAndTransfer(creep, creep.room.storage, resourceType)
                     }

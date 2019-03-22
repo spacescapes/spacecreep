@@ -75,37 +75,53 @@ module.exports = {
             }
         }
     },
-    marketTrade: function (){
+    doDeal: function(offset, resource, quantity, roomName, minimum){
     //    var resource = RESOURCE_HYDROGEN;
     //    var resource = RESOURCE_POWER;
-        resource = RESOURCE_ENERGY;
+//             var  resource = RESOURCE_ENERGY
+//        resource = RESOURCE_KEANIUM
 //        resource = RESOURCE_LEMERGIUM
 //        resource = RESOURCE_CATALYZED_GHODIUM_ACID
     //    resource = RESOURCE_ZYNTHIUM;
-        var buyOrders = Game.market.getAllOrders({type: ORDER_BUY, resourceType: resource});
-        var sellOrders = Game.market.getAllOrders({type: ORDER_SELL, resourceType: resource});
+//        console.log("checking deal: "+roomName+" " +Game.rooms[roomName].storage.store[resource])
 
-        var maxOrder = _.max(buyOrders, ((a) => (a.price)));
-        var minOrder = _.min(sellOrders, ((a) => (a.price)));
+
+
+        if ((Game.time % 12 == offset ) && (Game.rooms[roomName].terminal.store[resource] > minimum)){
+console.log(Game.time % 15)
+            var buyOrders = Game.market.getAllOrders({type: ORDER_BUY, resourceType: resource});
+            var sellOrders = Game.market.getAllOrders({type: ORDER_SELL, resourceType: resource});
+
+            var maxOrder = _.max(buyOrders, ((a) => (a.price)));
+            var minOrder = _.min(sellOrders, ((a) => (a.price)));
 
 //        var order = minOrder
-        var order = maxOrder
+            var order = maxOrder
 
-       // Game.market.deal(maxOrder.id, 5000, 'W51N49')
+            var dealResult = Game.market.deal(order.id, quantity, roomName)
 
-//        var dealResult = Game.market.deal(order.id, 10, 'W48N51')   // bei 100 in 4 Tagen 400k verbrauch  (585k nach 4 tagen fÃ¼lgrad)
+            console.log("deal: "+roomName+" " +Game.rooms[roomName].terminal.store[resource] + " result: " + dealResult)
 
-        var dealResult
+        }
 
-        var dealResult = Game.market.deal(order.id, 150, 'W51N49')
-//        var dealResult = Game.market.deal(order.id, 10, 'W49N49')
-        var dealResult = Game.market.deal(order.id, 150, 'W48N51')
-        var dealResult = Game.market.deal(order.id, 120, 'W48N52')
-        var dealResult = Game.market.deal(order.id, 150, 'W48N54')
-        var dealResult = Game.market.deal(order.id, 150, 'W51N51')
-        var dealResult = Game.market.deal(order.id, 150, 'W43N43')
-        var dealResult = Game.market.deal(order.id, 150, 'W42N43')
-        var dealResult = Game.market.deal(order.id, 150, 'W48N46')
+
+    },
+    marketTrade: function (){
+
+
+        this.doDeal(1, RESOURCE_ENERGY,  15000, 'W49N49', 20000)
+        this.doDeal(2, RESOURCE_ENERGY,  15000, 'W48N51', 20000)
+        this.doDeal(3, RESOURCE_ENERGY,  15000, 'W48N52', 20000)
+        this.doDeal(4, RESOURCE_ENERGY,  15000, 'W48N54', 20000)
+        this.doDeal(5, RESOURCE_ENERGY,  15000, 'W51N51', 20000)
+        this.doDeal(6, RESOURCE_KEANIUM,  15000, 'W43N43', 40000)
+//        this.doDeal(6, RESOURCE_ENERGY,  1500, 'W43N43', 90000)
+        this.doDeal(7, RESOURCE_ENERGY,  15000, 'W42N43', 20000)
+        this.doDeal(8, RESOURCE_ENERGY,  15000, 'W48N46', 20000)
+        this.doDeal(9, RESOURCE_ENERGY,  15000, 'W39N49', 20000)
+        this.doDeal(10, RESOURCE_ENERGY, 15000, 'W37N48', 20000)
+        this.doDeal(11, RESOURCE_LEMERGIUM,  1500, 'W42N35', 40000)
+
 
 
 //var dealResult = Game.market.deal(order.id, 8500, 'W48N54')
@@ -117,8 +133,6 @@ module.exports = {
 
     //    maxOrder = _.max(orders, ((a) => (a.price)));
 
-
-        console.log("Deal: "+order.price+ " result: "+ dealResult)
 
     },
 
