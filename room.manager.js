@@ -522,29 +522,33 @@ var roomManager = {
 
     spawns.forEach((spawn) => {
         var spawnResult
+        var newSpawnMap
+
         if (!spawn.spawning){
 // ANKER
-            var newSpawnMap = {}
-//          console.log("1: "+JSON.stringify(Memory.spawnMap[room.name]))
+            if (!newSpawnMap){
+                newSpawnMap = {}
+    //          console.log("1: "+JSON.stringify(Memory.spawnMap[room.name]))
 
-            if (Memory.spawnMap[room.name] && Memory.spawnMap[room.name].room.spawnMaps){
-                var spawnMaps = Memory.spawnMap[room.name].room.spawnMaps
-                spawnMaps.forEach((spawnConfiguration) => {
-                    var autoSpawnMap = this.storedSpawnMap(room, spawnConfiguration.name, spawnConfiguration)
-                    Object.keys(autoSpawnMap).forEach((key)=>(newSpawnMap[key] = autoSpawnMap[key]))
-                })
-            }
-            if (Memory.spawnMap['all'] && Memory.spawnMap['all'].room.spawnMaps){
-                var spawnMaps = Memory.spawnMap['all'].room.spawnMaps
-                spawnMaps.forEach((spawnConfiguration) => {
-                    var autoSpawnMap = this.storedSpawnMap(room, spawnConfiguration.name, spawnConfiguration)
+                if (Memory.spawnMap[room.name] && Memory.spawnMap[room.name].room.spawnMaps){
+                    var spawnMaps = Memory.spawnMap[room.name].room.spawnMaps
+                    spawnMaps.forEach((spawnConfiguration) => {
+                        var autoSpawnMap = this.storedSpawnMap(room, spawnConfiguration.name, spawnConfiguration)
+                        Object.keys(autoSpawnMap).forEach((key)=>(newSpawnMap[key] = autoSpawnMap[key]))
+                    })
+                }
+                if (Memory.spawnMap['all'] && Memory.spawnMap['all'].room.spawnMaps){
+                    var spawnMaps = Memory.spawnMap['all'].room.spawnMaps
+                    spawnMaps.forEach((spawnConfiguration) => {
+                        var autoSpawnMap = this.storedSpawnMap(room, spawnConfiguration.name, spawnConfiguration)
 
-                    Object.keys(autoSpawnMap).forEach((key)=>{
-                        //console.log("storing: newSpawMap "+key+'-'+room.name+":"+JSON.stringify(autoSpawnMap[key]));
-                        newSpawnMap[key+'-'+room.name] = autoSpawnMap[key]})
-                })
+                        Object.keys(autoSpawnMap).forEach((key)=>{
+                            //console.log("storing: newSpawMap "+key+'-'+room.name+":"+JSON.stringify(autoSpawnMap[key]));
+                            newSpawnMap[key+'-'+room.name] = autoSpawnMap[key]})
+                    })
+                }
             }
-/*
+        /*
             if (Memory.spawnMap[room.name]){
                 Object.keys(Memory.spawnMap[room.name].creeps).forEach((key)=>(newSpawnMap[key] = Memory.spawnMap[room.name].creeps[key]))
             }
