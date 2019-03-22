@@ -115,4 +115,4 @@ var roleHealer = {
 }
 };
 
-module.exports = roleHealer;
+module.exports = roleHealer; 
