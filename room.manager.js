@@ -28,8 +28,8 @@ var roomManager = {
                     baseMap['XD-'+spawnMapName+'-0-'+room.name]=
                         {role: 'dropper', sId: sources[0].id, bodyparts: this.baseBodies('dropper', room.energyAvailable), autoSpawn: true, required: spawnConfiguration.required}
                 }
-            } else if (room.find(FIND_HOSTILE_CREEPS).length){
-                console.log("MY OWN ROOM " + room.name+"has enemy"+Game.rooms[room.name].find(FIND_HOSTILE_CREEPS).length)
+            } else if (room.find(FIND_HOSTILE_CREEPS).length > 1){
+                console.log("MY OWN ROOM " + room.name+" has enemy ")
                 baseMap  = {
                     ['XA-'+room.name+'-1-']: {role: 'attacker', room: room.name, bodyparts: this.baseBodies('attackerWithHeal', room.energyAvailable), ar: 40, autoSpawn: true, required: spawnConfiguration.required },
                 }
@@ -141,6 +141,11 @@ var roomManager = {
                 baseMap['XU-'+spawnMapName+'-'+i+'-'+room.name]=
                     {role: 'upgrader', room: spawnConfiguration.room, bodyparts: this.baseBodies('upgrader', room.energyCapacityAvailable), autoSpawn: true, required: spawnConfiguration.required }
             }
+        } else if (spawnMapName == 'energyDelivery'){
+            for (i=1;i<=spawnConfiguration.copy;i++){
+                baseMap['XED-'+spawnMapName+'-'+i+'-'+room.name]=
+                    {role: 'energyDelivery', room: spawnConfiguration.room, bodyparts: this.baseBodies('lorry', room.energyCapacityAvailable), autoSpawn: true, required: spawnConfiguration.required }
+            }
         }  else if (spawnMapName == 'collector1'){
             for (i=1;i<=spawnConfiguration.copy;i++){
                 baseMap['XC-'+spawnMapName+'-'+i+'-'+room.name]=
@@ -166,7 +171,7 @@ var roomManager = {
 //                ['XA-'+spawnMapName+'-2-'+room.name+'-'+spawnConfiguration.room]: {role: 'attacker', room: spawnConfiguration.room, bodyparts: this.baseBodies('attacker', 500), ar: 40, autoSpawn: true, required: spawnConfiguration.required }
                 }
             } else if (Game.rooms[spawnConfiguration.room].find(FIND_HOSTILE_CREEPS).length){
-                console.log(spawnConfiguration.room+"has enemy"+Game.rooms[spawnConfiguration.room].find(FIND_HOSTILE_CREEPS).length)
+                console.log(spawnConfiguration.room+" has ENEMY ")
                 baseMap  = {
                 ['XA-'+spawnMapName+'-1-'+room.name+'-'+spawnConfiguration.room]: {role: 'attacker', room: spawnConfiguration.room, bodyparts: this.baseBodies('attackerWithHeal', room.energyAvailable), ar: 40, autoSpawn: true, required: spawnConfiguration.required },
 //                ['XA-'+spawnMapName+'-2-'+room.name+'-'+spawnConfiguration.room]: {role: 'attacker', room: spawnConfiguration.room, bodyparts: this.baseBodies('attacker', 500), ar: 40, autoSpawn: true, required: spawnConfiguration.required }
@@ -324,7 +329,8 @@ var roomManager = {
                     {energy: 950, body: mainHelper.getBody(1,WORK,11,CARRY,6,MOVE)},
                     {energy: 1100, body: mainHelper.getBody(1,WORK,13,CARRY,7,MOVE)},
                     {energy: 1250, body: mainHelper.getBody(1,WORK,15,CARRY,8,MOVE)},
-                    {energy: 1400, body: mainHelper.getBody(1,WORK,17,CARRY,9,MOVE)}
+                    {energy: 1400, body: mainHelper.getBody(1,WORK,17,CARRY,9,MOVE)},
+                    {energy: 1550, body: mainHelper.getBody(1,WORK,19,CARRY,10,MOVE)}
                 ]
             },
             {
@@ -427,10 +433,10 @@ var roomManager = {
         var linksSorted = links.sort(function(a,b){return b.energy - a.energy})
 //        console.log("LINKS sorted: "+ linksSorted.length + " last: " + linksSorted[linksSorted.length-1].energy+ " first: " + linksSorted[0].energy);
 
-        if (((linksSorted[0].energy - linksSorted[linksSorted.length-1].energy ) > 100) && linksSorted[0].energy > 700){
+        if (((linksSorted[0].energy - linksSorted[linksSorted.length-1].energy ) > 600)){
 //            linksSorted[0].transferEnergy(linksSorted[linksSorted.length-1], ((linksSorted[0].energy - linksSorted[linksSorted.length-1].energy )/2) + 50);
 
-            var energyAmount =  Math.min(linksSorted[0].energy, 800-(linksSorted[linksSorted.length-1].energy)) - 100
+            var energyAmount =  Math.min(linksSorted[0].energy, 800-(linksSorted[linksSorted.length-1].energy)) - 2
 
             var transfer = linksSorted[0].transferEnergy(linksSorted[linksSorted.length-1], energyAmount);
             Memory.linkMode[linksSorted[0].id]='send'
@@ -519,13 +525,14 @@ var roomManager = {
                 {align: 'left', opacity: 0.8});
         }
     })
-
+    var newSpawnMap
     spawns.forEach((spawn) => {
         var spawnResult
-        var newSpawnMap
+
 
         if (!spawn.spawning){
 // ANKER
+
             if (!newSpawnMap){
                 newSpawnMap = {}
     //          console.log("1: "+JSON.stringify(Memory.spawnMap[room.name]))

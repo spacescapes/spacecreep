@@ -4,22 +4,17 @@ var roleUpgrader = {
     run: function(creep) {
 
 
-        return(0)
+//        return(0)
 if (creep.room.name == 'W48N54x' && creep.ticksToLive > 1000 && (!creep.body.some((a)=>(a.boost))) && Game.getObjectById('5c14300f0bb15c5410d31755').mineralAmount > 100){
     creep.moveTo(Game.flags.L6)
 //    creep.moveTo(Game.spawns.Spawn7)
     Game.getObjectById('5c14300f0bb15c5410d31755').boostCreep(creep)
-//    creep.move(BOTTOM)
     return(0)
 }
-  if (creep.room.name == 'W47N45' && creep.pos.x <= 13 ){
-//  creep.moveTo(24,37)
-//    return(0)
-  }
-  if (creep.room.name == 'W45N43' && creep.pos.x <= 5 ){
-  creep.moveTo(11,36)
 
-    return(0)
+  if (creep.room.name == 'W45N43' && creep.pos.x <= 5 ){
+    creep.moveTo(11,36)
+return(0)
   }
 //return(0)
 /*
@@ -40,9 +35,6 @@ if (creep.room.name == 'W48N54x' && creep.ticksToLive > 1000 && (!creep.body.som
         }
 */
 
-//return(0);
-//if (creep.name.startsWith('U2')){Game.spawns.Spawn3.recycleCreep(creep); creep.moveTo(Game.spawns['Spawn3']) ; return(0)}
-//if (creep.name.startsWith('U4')){ creep.moveTo(Game.flags.C18) ; return(0)}
     var buildSite = creep.pos.findInRange(FIND_CONSTRUCTION_SITES,0);
     if (buildSite.length > 0){
         creep.build(buildSite[0])

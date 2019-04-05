@@ -6,11 +6,7 @@ var o = Object.create(meta);
 o.run = function(creep) {
 
     creep.say("lorry")
-    /*
-    if (creep.name.startsWith('RE411173C29')){memory.ta
-    if (creep.memory.spawnRoomNameink && creep.room.name != creep.memory.spawnRoomName) {creep.moveTo(Game.rooms[creep.memory.spawnRoomName].contler); return(0)}
-    }
-    */
+    if (creep.memory.spawnRoomName && creep.room.name != creep.memory.spawnRoomName) {creep.moveTo(Game.rooms[creep.memory.spawnRoomName].controller); return(0)}
 
     if (!creep.memory.harvestThreshold) creep.memory.harvestThreshold = 0
     if (creep.carry.energy == 0 ) creep.memory.work = false
@@ -34,6 +30,7 @@ o.run = function(creep) {
                        }
                 });
                 if (!containerSite){
+                    if (Game.ti)
                 containerSite = creep.pos.findClosestByPath(FIND_HOSTILE_STRUCTURES, {
             		filter: function(object){
             			return ((object.structureType == STRUCTURE_EXTENSION && object.energy > 0 ) ||  ( object.structureType === STRUCTURE_CONTAINER && object.store.energy > 100) || ( object.structureType === STRUCTURE_TERMINAL && object.store.energy > 100) ||  ( object.structureType === STRUCTURE_STORAGE && object.store.energy > 1000) ||  ( object.structureType === STRUCTURE_LINK && object.energy > 0) ||  ( object.structureType === STRUCTURE_SPAWN && object.energy > 0) ||  ( object.structureType === STRUCTURE_POWER_SPAWN && object.energy > 0) || ( object.structureType === STRUCTURE_LAB && object.energy > 0)  || ( object.structureType === STRUCTURE_TOWER && object.energy > 0));
@@ -71,7 +68,10 @@ o.run = function(creep) {
     if (containerSite== -Infinity) containerSite = undefined
                         linkSite = _.max((_.filter(linkSites, ((a) => (Memory.linkMode[a.id]!='send') && (a.energy >= 100)))), ((a) => (a.energy - (creep.pos.getRangeTo(a)*2))));
     if (linkSite== -Infinity) linkSite = undefined
+
+
                         if (!containerSite || (containerSite && linkSite && creep.pos.getRangeTo(containerSite) > creep.pos.getRangeTo(linkSite))){
+    // ignore links
                             containerSite = linkSite
                         }
                         if (containerSite && creep.room.storage && creep.room.storage.store.energy > 1000 && creep.pos.getRangeTo(containerSite) > (creep.pos.getRangeTo(creep.room.storage)*3)){
@@ -86,7 +86,10 @@ o.run = function(creep) {
     if (creep.name == 'XO-baseLorry-3-W48N54'){console.log(containerSite)}
                         linkSite = _.max((_.filter(linkSites, ((a) => (Memory.linkMode[a.id]!='send') && a.energy > 300))), ((a) => (a.energy - (creep.pos.getRangeTo(a)*2))));
     if (linkSite== -Infinity) linkSite = undefined
+
+
                         if (!containerSite  || (containerSite && linkSite && creep.pos.getRangeTo(containerSite) > creep.pos.getRangeTo(linkSite))){
+    // ignore links
                             containerSite = linkSite
                         }
 
@@ -113,11 +116,20 @@ o.run = function(creep) {
                     if (!creep.memory.task) creep.memory.task = {}
                     creep.memory.task.id = containerSite.id
                     creep.say("L "+ (containerSite.structureType?containerSite.structureType:containerSite))
-                    if(creep.withdraw(containerSite, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(containerSite, {visualizePathStyle: {stroke: '#ffd0ff'}});
+                    if (containerSite.structureType == STRUCTURE_LINK){
+                        if(creep.withdraw(containerSite, RESOURCE_ENERGY, Math.min(containerSite.energy - 1,(creep.carryCapacity-_.sum(creep.carry)))) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(containerSite, {visualizePathStyle: {stroke: '#ffd0ff'}});
+                        } else {
+                            creep.memory.task = {}
+                            Memory.ta[containerSite.id] = undefined
+                        }
                     } else {
-                        creep.memory.task = {}
-                        Memory.ta[containerSite.id] = undefined
+                        if(creep.withdraw(containerSite, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(containerSite, {visualizePathStyle: {stroke: '#ffd0ff'}});
+                        } else {
+                            creep.memory.task = {}
+                            Memory.ta[containerSite.id] = undefined
+                        }
                     }
                 } else {
                     creep.say("no pickup")
@@ -160,6 +172,7 @@ o.run = function(creep) {
                 }
             });
         }
+/*
         if (!target){
             target = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
                 filter: (structure) => {
@@ -173,6 +186,7 @@ o.run = function(creep) {
             });
 
         }
+*/
         if (!target){
             target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {filter:function(a){return(a.structureType==STRUCTURE_LAB && a.energy < a.energyCapacity)}});
         }

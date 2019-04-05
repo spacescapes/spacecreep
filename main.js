@@ -16,6 +16,7 @@ var roleClaimer = require('role.claimer');
 var roleTower = require('role.tower');
 var roleTerminalEqualizer = require('role.terminalEqualizer');
 var roleContainerFiller = require('role.containerFiller');
+var roleEnergyDelivery = require('role.energyDelivery');
 var mainHelper = require('main.helper');
 var roomManager = require('room.manager');
 
@@ -27,6 +28,7 @@ module.exports.loop = function () {
 if (Game.time % 100 == 1){
 //    return(0)
 }
+Game.getObjectById("5c4b7d9fe9e68c62bcfead2c").observeRoom("W47N43")
 /*
     if (false){
     Game.getObjectById('5bf0b4dc260e1709efb22cd6').Creep([MOVE], ('worm' + '-' + Game.time),
@@ -137,8 +139,8 @@ if (Game.time % 100 == 1){
 //                        {name: "roadworker", copy: 3 },
                         {name: "custom",
                         creeps:{
-                        'A314': {role: 'attacker', sf: 'A4', ar: 40, copy: 3, bodyparts: mainHelper.getBody(4,TOUGH,4,ATTACK,4,MOVE)},
-                        'He314': {role: 'healer', sf: 'A4' , bodyparts: mainHelper.getBody(2,HEAL,2,MOVE,)},
+                            'DM1': {role: 'dropper', sf: 'M1', resource: RESOURCE_ZYNTHIUM, bodyparts: mainHelper.getBody(10,WORK,5,MOVE)},
+                            'Co1': {role: 'collector', bodyparts: mainHelper.getBody(1,CARRY,1,MOVE)},
 // 'L122': {role: 'labworker', sf: 'S3', tf: 'container2', bodyparts: mainHelper.getBody(10,CARRY,5,MOVE)},
 /*
                         'L1xxx': {role: "labworker", tf: 'S1', resource: 'UH', recycleAfterDelivery: true, bodyparts: mainHelper.getBody(2,CARRY,1,MOVE)},
@@ -205,12 +207,15 @@ if (Game.time % 100 == 1){
                         {name: "remoteHarvest", room: 'W44N43', copy: 1},
                         {name: "remoteHarvest", room: 'W44N42', copy: 1},
                         {name: "remoteHarvest", room: 'W43N44', copy: 1},
+                        {name: "remoteHarvest", room: 'W47N43', copy: 1},
+                        {name: "remoteHarvest", room: 'W45N43', copy: 2},
 
 //                        {name: "remoteHarvest", room: 'W42N43', copy: 2},
 
 //                        {name: "roadworker", room: 'W42N43'},
 //                        {name: "labworker", sf: 'S5', tf: 'container3', copy: 1},
 //                        {name: "upgrader", room: 'W42N43', copy: 2},
+
 
                         {name: "custom",
                         creeps:{
@@ -221,8 +226,20 @@ if (Game.time % 100 == 1){
 //                        'L311a2': {role: "labworker", sf: 'S12', tf: 'S5', resource: RESOURCE_KEANIUM, bodyparts: mainHelper.getBody(10,CARRY,10,MOVE)},
 //                        'L311a3': {role: "labworker", sf: 'S12', tf: 'S5', resource: RESOURCE_KEANIUM, bodyparts: mainHelper.getBody(10,CARRY,10,MOVE)},
 //                        'He511': {role: 'healer', sf: 'A5', follow:'A511', bodyparts: mainHelper.getBody(7,TOUGH,1,HEAL,4,MOVE,), required:true},
-//                                'Co63': {role: 'collector', bodyparts: mainHelper.getBody(4,CARRY,4,MOVE)},
-
+/*
+                                'Co11': {role: 'collector', bodyparts: mainHelper.getBody(12,CARRY,12,MOVE), room: 'W47N43'},
+                                'Co12': {role: 'collector', bodyparts: mainHelper.getBody(12,CARRY,12,MOVE), room: 'W47N43'},
+                                'Co13': {role: 'collector', bodyparts: mainHelper.getBody(12,CARRY,12,MOVE), room: 'W47N43'},
+                                'Co14': {role: 'collector', bodyparts: mainHelper.getBody(12,CARRY,12,MOVE), room: 'W47N43'},
+                                'Co15': {role: 'collector', bodyparts: mainHelper.getBody(12,CARRY,12,MOVE), room: 'W47N43'},
+                                'Co16': {role: 'collector', bodyparts: mainHelper.getBody(12,CARRY,12,MOVE), room: 'W47N43'},
+                                'Co17': {role: 'collector', bodyparts: mainHelper.getBody(12,CARRY,12,MOVE), room: 'W47N43'},
+                                'Co18': {role: 'collector', bodyparts: mainHelper.getBody(12,CARRY,12,MOVE), room: 'W47N43'},
+                                'Co19': {role: 'collector', bodyparts: mainHelper.getBody(20,CARRY,20,MOVE), room: 'W47N43'},
+                                'Co20': {role: 'collector', bodyparts: mainHelper.getBody(20,CARRY,20,MOVE), room: 'W47N43'},
+                                'Co21': {role: 'collector', bodyparts: mainHelper.getBody(20,CARRY,20,MOVE), room: 'W47N43'},
+                                'Co22': {role: 'collector', bodyparts: mainHelper.getBody(20,CARRY,20,MOVE), room: 'W47N43'},
+*/
                         }
                         }
 //                        {name: "remoteConstruction", room: 'W39N44', sf: 'C4', copy: 2},
@@ -365,7 +382,7 @@ if (Game.time % 100 == 1){
                     roads: false,
                     spawnMaps: [
                         {name: "baseLorry", required: true},
-                        {name: "roadworker", copy: 3},
+//                        {name: "roadworker", copy: 1},
                         {name: "upgrader", copy: 1},
 
                         {name: "custom",
@@ -426,7 +443,8 @@ if (Game.time % 100 == 1){
 //                                'Co3': {role: 'collector', bodyparts: mainHelper.getBody(4,CARRY,4,MOVE)},
                              }},
 //                        {name: "remoteConstruction", room: 'W34N47', sf: 'C9', copy: 2},
-                        {name: "upgrader", copy: 2},
+                        {name: "energyDelivery", room: 'W34N47', copy: 1},
+                        {name: "upgrader", copy: 1},
                         {name: "remoteHarvest", room: 'W37N49', copy: 1},
                         {name: "remoteHarvest", room: 'W38N49', copy: 1},
                         {name: "remoteHarvest", room: 'W36N48', copy: 1},
@@ -441,7 +459,28 @@ if (Game.time % 100 == 1){
                     spawnMaps: [
                         {name: "baseLorry", required: true},
                         {name: "upgrader", copy: 1},
+                        {name: "custom",
 
+                             creeps:{
+                                 'A11': {role: 'attacker', sf: 'A4', ar: 5, copy: 1, bodyparts: mainHelper.getBody(20,ATTACK,10,MOVE)},
+                                 'A12': {role: 'attacker', sf: 'A4', ar: 5, copy: 1, bodyparts: mainHelper.getBody(20,ATTACK,10,MOVE)},
+//                                'Co4': {role: 'collector', bodyparts: mainHelper.getBody(8,CARRY,8,MOVE)},
+//                                'Co5': {role: 'collector', bodyparts: mainHelper.getBody(12,CARRY,12,MOVE)},
+
+                                'Co11': {role: 'collector', bodyparts: mainHelper.getBody(20,CARRY,20,MOVE), room: 'W42N33'},
+                                'Co12': {role: 'collector', bodyparts: mainHelper.getBody(20,CARRY,20,MOVE), room: 'W42N33'},
+                                'Co13': {role: 'collector', bodyparts: mainHelper.getBody(20,CARRY,20,MOVE), room: 'W42N33'},
+                                'Co14': {role: 'collector', bodyparts: mainHelper.getBody(20,CARRY,20,MOVE), room: 'W42N33'},
+                                'Co15': {role: 'collector', bodyparts: mainHelper.getBody(20,CARRY,20,MOVE), room: 'W42N33'},
+                                'Co16': {role: 'collector', bodyparts: mainHelper.getBody(20,CARRY,20,MOVE), room: 'W42N33'},
+                                'Co17': {role: 'collector', bodyparts: mainHelper.getBody(20,CARRY,20,MOVE), room: 'W42N33'},
+                                'Co18': {role: 'collector', bodyparts: mainHelper.getBody(20,CARRY,20,MOVE), room: 'W42N33'},
+                                'Co19': {role: 'collector', bodyparts: mainHelper.getBody(20,CARRY,20,MOVE), room: 'W42N33'},
+                                'Co20': {role: 'collector', bodyparts: mainHelper.getBody(20,CARRY,20,MOVE), room: 'W42N33'},
+                                'Co21': {role: 'collector', bodyparts: mainHelper.getBody(20,CARRY,20,MOVE), room: 'W42N33'},
+                                'Co22': {role: 'collector', bodyparts: mainHelper.getBody(20,CARRY,20,MOVE), room: 'W42N33'},
+
+                             }},
 
 //                        {name: "roadworker", copy: 1},
                         {name: "remoteHarvest", room: 'W43N32', copy: 1},
@@ -466,8 +505,20 @@ if (Game.time % 100 == 1){
                              }},
                         {name: "upgrader", copy: 2},
 //                        {name: "roadworker", copy: 2},
-                        {name: "remoteHarvest", room: 'W53N45', copy: 2},
-                        {name: "remoteHarvest", room: 'W52N44', copy: 2}
+                        {name: "remoteHarvest", room: 'W53N45', copy: 1},
+                        {name: "remoteHarvest", room: 'W52N44', copy: 1}
+                        ]
+                }
+            },
+            W34N47:
+            {
+                room: {
+                    construct: true,
+                    roads: false,
+                    spawnMaps: [
+                        {name: "baseLorry", required: true},
+                        {name: "upgrader", copy: 3},
+                        {name: "remoteHarvest", room: 'W33N47', copy: 1},
                         ]
                 }
             },
@@ -650,8 +701,11 @@ if (creep.name=='He5141'){creep.memory.role='healer'}
 //            roleUpgrader.run(creep);
         } else if(creep.memory.role == 'upgraderRemote') {
             roleUpgraderRemote.run(creep);
+
         } else if(creep.memory.role == 'linkPuller') {
           roleLinkPuller.run(creep)
+        } else if(creep.memory.role == 'energyDelivery') {
+          roleEnergyDelivery.run(creep)
         } else if(creep.memory.role == 'linkFiller') {
           roleLinkFiller.run(creep)
         } else if(creep.memory.role == 'containerFiller') {

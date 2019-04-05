@@ -154,7 +154,7 @@ var roleAttacker = {
 //    console.log("structure: ", structure)
 //     console.log("enemy: ", enemy, " att ", creep.attack(enemy))
     //        		var enemy = Game.rooms['E52S28'].controller
-    //var enemy = Game.getObjectById('5b4933066b17c216db466747')
+    if (creep.name == 'A11' || creep.name == 'A12') {var enemy = Game.getObjectById('5b7e70375f4f74406cb41376')}
 //enemy = undefined
                 if (enemy && enemy.pos.getRangeTo(targetFlag) <= ar){
                     creep.say("go away!")

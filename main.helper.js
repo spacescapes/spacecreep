@@ -85,10 +85,18 @@ module.exports = {
     //    resource = RESOURCE_ZYNTHIUM;
 //        console.log("checking deal: "+roomName+" " +Game.rooms[roomName].storage.store[resource])
 
+            if (!resource){
+                resource = _.max( Object.keys(Game.rooms[roomName].terminal.store), (r) => (Game.rooms[roomName].terminal.store[r]))
+                console.log(resource + " " + roomName)
+                console.log(JSON.stringify(Game.rooms[roomName].terminal.store))
+                minimum = 200000
+            }
 
 
-        if ((Game.time % 12 == offset ) && (Game.rooms[roomName].terminal.store[resource] > minimum)){
-console.log(Game.time % 15)
+        if ((Game.time % 15 == offset ) && (_.sum(Game.rooms[roomName].terminal.store) > minimum)){
+            console.log(Game.time % 15)
+
+
             var buyOrders = Game.market.getAllOrders({type: ORDER_BUY, resourceType: resource});
             var sellOrders = Game.market.getAllOrders({type: ORDER_SELL, resourceType: resource});
 
@@ -107,21 +115,36 @@ console.log(Game.time % 15)
 
     },
     marketTrade: function (){
-
-
-        this.doDeal(1, RESOURCE_ENERGY,  15000, 'W49N49', 20000)
-        this.doDeal(2, RESOURCE_ENERGY,  15000, 'W48N51', 20000)
-        this.doDeal(3, RESOURCE_ENERGY,  15000, 'W48N52', 20000)
-        this.doDeal(4, RESOURCE_ENERGY,  15000, 'W48N54', 20000)
-        this.doDeal(5, RESOURCE_ENERGY,  15000, 'W51N51', 20000)
-        this.doDeal(6, RESOURCE_KEANIUM,  15000, 'W43N43', 40000)
+        this.doDeal(1, undefined,  1500, 'W49N49', 90000)
+        this.doDeal(2, undefined,  1500, 'W48N51', 90000)
+        this.doDeal(3, undefined,  1500, 'W48N52', 90000)
+        this.doDeal(4, undefined,  1500, 'W48N54', 90000)
+        this.doDeal(5, undefined,  1500, 'W51N51', 90000)
+        this.doDeal(6, undefined,  1500, 'W43N43', 90000)
 //        this.doDeal(6, RESOURCE_ENERGY,  1500, 'W43N43', 90000)
-        this.doDeal(7, RESOURCE_ENERGY,  15000, 'W42N43', 20000)
-        this.doDeal(8, RESOURCE_ENERGY,  15000, 'W48N46', 20000)
-        this.doDeal(9, RESOURCE_ENERGY,  15000, 'W39N49', 20000)
-        this.doDeal(10, RESOURCE_ENERGY, 15000, 'W37N48', 20000)
-        this.doDeal(11, RESOURCE_LEMERGIUM,  1500, 'W42N35', 40000)
-
+        this.doDeal(7, undefined,  1500, 'W42N43', 90000)
+        this.doDeal(8, undefined,  1500, 'W48N46', 90000)
+        this.doDeal(9, undefined,  1500, 'W39N49', 90000)
+        this.doDeal(10, undefined, 1500, 'W37N48', 90000)
+        this.doDeal(11, undefined,  1500, 'W42N35', 90000)
+        this.doDeal(12, undefined,  1500, 'W42N32', 90000)
+/*
+        this.doDeal(1, RESOURCE_ENERGY,  1500, 'W49N49', 90000)
+        this.doDeal(2, RESOURCE_ENERGY,  1500, 'W48N51', 90000)
+        this.doDeal(2, RESOURCE_LEMERGIUM,  1500, 'W48N51', 30000)
+        this.doDeal(3, RESOURCE_ENERGY,  1500, 'W48N52', 90000)
+        this.doDeal(4, RESOURCE_ENERGY,  1500, 'W48N54', 90000)
+        this.doDeal(5, RESOURCE_ENERGY,  1500, 'W51N51', 90000)
+        this.doDeal(6, RESOURCE_KEANIUM,  1500, 'W43N43', 10000)
+        this.doDeal(6, RESOURCE_ENERGY,  1500, 'W43N43', 90000)
+//        this.doDeal(6, RESOURCE_ENERGY,  1500, 'W43N43', 90000)
+        this.doDeal(7, RESOURCE_ENERGY,  1500, 'W42N43', 90000)
+        this.doDeal(8, RESOURCE_ENERGY,  1500, 'W48N46', 90000)
+        this.doDeal(9, RESOURCE_ENERGY,  1500, 'W39N49', 90000)
+        this.doDeal(10, RESOURCE_ENERGY, 1500, 'W37N48', 90000)
+        this.doDeal(11, RESOURCE_LEMERGIUM,  1500, 'W42N35', 90000)
+        this.doDeal(12, RESOURCE_ENERGY,  1500, 'W42N32', 90000)
+*/
 
 
 //var dealResult = Game.market.deal(order.id, 8500, 'W48N54')
