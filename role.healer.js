@@ -6,6 +6,35 @@ var roleHealer = {
 
         var maxDistance = 40
         let viaFlags = Object.keys(Game.flags).filter((f) => f.startsWith('via')).sort()
+/*
+if (creep.room.name == "W44N42" || creep.room.name == "W43N42") {
+    creep.moveTo(49,32)
+    return(0)
+
+}
+
+if (creep.room.name == "W42N33") {
+    creep.moveTo(16, 49)
+    return(0)
+
+}
+if (creep.room.name == "W42N41") {
+    creep.moveTo(49,23)
+    return(0)
+
+}
+if (creep.room.name == "W41N41" || creep.room.name == "W40N40" || creep.room.name == "W40N39" || creep.room.name == "W40N38" || creep.room.name == "W40N37" ) {
+    creep.moveTo(21,49)
+    return(0)
+
+}
+if (creep.room.name == "W41N40") {
+    creep.moveTo(49,37)
+    return(0)
+
+}
+*/
+
 
         if (!creep.memory.viaPassed) creep.memory.viaPassed = {}
 
@@ -95,14 +124,19 @@ var roleHealer = {
     			return (object.hits < object.hitsMax);
     		   }
 		})
+        if (enemy){
+            enemy.memory.healedBy = creep.id
+        }
+        if (creep.memory.follow){
+            enemy = Game.creeps[creep.memory.follow]
+        }
 
         if (enemy){
             if(creep.heal(enemy) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(enemy, {visualizePathStyle: {stroke: '#00ffff'}});
             }
-
         } else {
-            if(!creep.pos.inRangeTo(targetFlag,1)) creep.moveTo(targetFlag, {visualizePathStyle: {stroke: '#00ffff'}})
+            if(!creep.pos.inRangeTo(targetFlag,4)) creep.moveTo(targetFlag, {visualizePathStyle: {stroke: '#00ffff'}})
         }
         if(!creep.pos.inRangeTo(targetFlag,maxDistance)) creep.moveTo(targetFlag, {visualizePathStyle: {stroke: '#00ffff'}})
 

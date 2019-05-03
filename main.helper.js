@@ -84,6 +84,9 @@ module.exports = {
 //        resource = RESOURCE_CATALYZED_GHODIUM_ACID
     //    resource = RESOURCE_ZYNTHIUM;
 //        console.log("checking deal: "+roomName+" " +Game.rooms[roomName].storage.store[resource])
+            if (!Game.rooms[roomName] || !Game.rooms[roomName].terminal){
+                return(0)
+            }
 
             if (!resource){
                 resource = _.max( Object.keys(Game.rooms[roomName].terminal.store), (r) => (Game.rooms[roomName].terminal.store[r]))
@@ -93,7 +96,8 @@ module.exports = {
             }
 
 
-        if ((Game.time % 15 == offset ) && (_.sum(Game.rooms[roomName].terminal.store) > minimum)){
+
+        if ((false || ( Game.time % 15 == offset )) && (_.sum(Game.rooms[roomName].terminal.store) > minimum)){
             console.log(Game.time % 15)
 
 
@@ -120,12 +124,13 @@ module.exports = {
         this.doDeal(3, undefined,  1500, 'W48N52', 90000)
         this.doDeal(4, undefined,  1500, 'W48N54', 90000)
         this.doDeal(5, undefined,  1500, 'W51N51', 90000)
-        this.doDeal(6, undefined,  1500, 'W43N43', 90000)
+        this.doDeal(5, undefined,  1500, 'W52N45', 90000)
+        this.doDeal(6, undefined,  1500, 'W43N43', 90)
 //        this.doDeal(6, RESOURCE_ENERGY,  1500, 'W43N43', 90000)
         this.doDeal(7, undefined,  1500, 'W42N43', 90000)
         this.doDeal(8, undefined,  1500, 'W48N46', 90000)
-        this.doDeal(9, undefined,  1500, 'W39N49', 90000)
-        this.doDeal(10, undefined, 1500, 'W37N48', 90000)
+//        this.doDeal(9, undefined,  1500, 'W39N49', 90000)
+//        this.doDeal(10, undefined, 1500, 'W37N48', 90000)
         this.doDeal(11, undefined,  1500, 'W42N35', 90000)
         this.doDeal(12, undefined,  1500, 'W42N32', 90000)
 /*

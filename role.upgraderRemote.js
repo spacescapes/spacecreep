@@ -27,18 +27,19 @@ var roleUpgraderRemote = {
             creep.moveTo(Game.rooms[creep.memory.spawnRoomName].controller)
             return (0)
             }
-        if (creep.room.name != creep.memory.spawnRoomName){
-//            creep.room.createConstructionSite(creep.pos.x, creep.pos.y, STRUCTURE_ROAD)
-        }
+
          if(creep.carry.energy == 0) {
 //            console.log(Game.getObjectById(creep.memory.sId)+ " "+ creep.memory.sId)
 
 
-            var energy = creep.pos.findInRange(FIND_DROPPED_RESOURCES,10);
+            var energy = creep.pos.findInRange(FIND_DROPPED_RESOURCES,9);
 
             if ((creep.room.name == creep.memory.spawnRoomName && energy.length && energy[0].amount > 300) || (creep.room.name != creep.memory.spawnRoomName && energy.length && energy[0].amount > 100) ){
                 creep.say("energy")
+
+
                 if (creep.pickup(energy[0]) != OK) creep.moveTo(energy[0])
+
             } else {
                 if(!creep.pos.inRangeTo(sourceFlag,5)) {
                     creep.moveTo(sourceFlag, {visualizePathStyle: {stroke: '#00ffff'}})

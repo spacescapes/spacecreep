@@ -16,53 +16,8 @@ var roomManager = {
     storedSpawnMap: function(room, spawnMapName, spawnConfiguration) {
         if (spawnConfiguration.copy === undefined) spawnConfiguration.copy = 1
         var baseMap = {}
-        if (spawnMapName == 'base'){
-            var creepsInRoom = room.find(FIND_MY_CREEPS);
-            var numberOfDroppers = _.sum(creepsInRoom, (c) => c.memory.role == "dropper");
-            var numberOfHarvesters = _.sum(creepsInRoom, (c) => c.memory.role == "harvester");
 
-            if (numberOfDroppers==0){
-                sources = room.find(FIND_SOURCES).sort(function(a, b){return a.id - b.id})
-                if (sources){
-//                console.log(source.id)
-                    baseMap['XD-'+spawnMapName+'-0-'+room.name]=
-                        {role: 'dropper', sId: sources[0].id, bodyparts: this.baseBodies('dropper', room.energyAvailable), autoSpawn: true, required: spawnConfiguration.required}
-                }
-            } else if (room.find(FIND_HOSTILE_CREEPS).length > 1){
-                console.log("MY OWN ROOM " + room.name+" has enemy ")
-                baseMap  = {
-                    ['XA-'+room.name+'-1-']: {role: 'attacker', room: room.name, bodyparts: this.baseBodies('attackerWithHeal', room.energyAvailable), ar: 40, autoSpawn: true, required: spawnConfiguration.required },
-                }
-            } else if (numberOfHarvesters<=1){
-                baseMap = ({
-                    ['XH-'+spawnMapName+'-1-'+room.name]: {role: 'harvester', bodyparts: this.baseBodies('harvester', room.energyAvailable), autoSpawn: true, required: spawnConfiguration.required },
-                    ['XH-'+spawnMapName+'-2-'+room.name]: {role: 'harvester', bodyparts: this.baseBodies('harvester', room.energyAvailable), autoSpawn: true, required: spawnConfiguration.required },
-                })
-            } else {
-                baseMap = ({
-                    ['XH-'+spawnMapName+'-1-'+room.name]: {role: 'harvester', bodyparts: this.baseBodies('harvester', room.energyCapacityAvailable-200), autoSpawn: true, required: spawnConfiguration.required },
-                    ['XH-'+spawnMapName+'-2-'+room.name]: {role: 'harvester', bodyparts: this.baseBodies('harvester', room.energyCapacityAvailable-200), autoSpawn: true, required: spawnConfiguration.required },
-                })
-            }
-//            console.log(JSON.stringify(sourcesSorted))
-            room.find(FIND_SOURCES).sort(function(a, b){return a.id - b.id}).forEach((source, index)=>{
-//                console.log(source.id)
-                baseMap['XD-'+spawnMapName+'-'+(index+1)+'-'+room.name]=
-                    {role: 'dropper', sId: source.id, bodyparts: this.baseBodies('dropper', room.energyCapacityAvailable-100), autoSpawn: true, required: spawnConfiguration.required}            })
-
-
-            var baseMap2 = ({
-                ['XH-'+spawnMapName+'-3-'+room.name]: {role: 'harvester', bodyparts: this.baseBodies('harvester', room.energyCapacityAvailable-100), autoSpawn: true, required: spawnConfiguration.required },
-                ['XU-'+spawnMapName+'-1-'+room.name]: {role: 'upgrader', bodyparts: this.baseBodies('upgrader', room.energyAvailable), autoSpawn: true, required: spawnConfiguration.required },
-                ['XR-'+spawnMapName+'-1-'+room.name]: {role: 'roadworker', bodyparts: this.baseBodies('roadworker', room.energyAvailable), autoSpawn: true, required: spawnConfiguration.required },
-//                ['XU-'+spawnMapName+'-2-'+room.name]: {role: 'upgrader', bodyparts: this.baseBodies('upgrader', room.energyCapacityAvailable), autoSpawn: true, required: spawnConfiguration.required },
-//                ['XR-'+spawnMapName+'-2-'+room.name]: {role: 'roadworker', bodyparts: this.baseBodies('roadworker', room.energyCapacityAvailable), autoSpawn: true, required: spawnConfiguration.required },
-//                ['XW-'+spawnMapName+'-1-'+room.name]: {role: 'worker', bodyparts: this.baseBodies('worker', room.energyCapacityAvailable), autoSpawn: true, required: spawnConfiguration.required }
-                ['XH-'+spawnMapName+'-4-'+room.name]: {role: 'harvester', bodyparts: this.baseBodies('harvester', room.energyCapacityAvailable-100), autoSpawn: true, required: spawnConfiguration.required },
-            })
-
-            baseMap = Object.assign(baseMap, baseMap2);
-        } else  if (spawnMapName == 'baseLorry'){
+        if (spawnMapName == 'baseLorry'){
             var creepsInRoom = room.find(FIND_MY_CREEPS);
             var numberOfDroppers = _.sum(creepsInRoom, (c) => c.memory.role == "dropper");
             var numberOfHarvesters = _.sum(creepsInRoom, (c) => c.memory.role == "lorry");
@@ -82,7 +37,7 @@ var roomManager = {
             } else if (room.find(FIND_HOSTILE_CREEPS).length){
                 console.log("MY OWN ROOM " + room.name+"has enemy"+Game.rooms[room.name].find(FIND_HOSTILE_CREEPS).length)
                 baseMap  = {
-                    ['XA-'+room.name+'-1-']: {role: 'attacker', room: room.name, bodyparts: this.baseBodies('attackerWithHeal', room.energyAvailable), ar: 40, autoSpawn: true, required: spawnConfiguration.required },
+//                    ['XA-'+room.name+'-1-']: {role: 'attacker', room: room.name, bodyparts: this.baseBodies('attackerWithHeal', room.energyAvailable), ar: 40, autoSpawn: true, required: spawnConfiguration.required },
                 }
             } else {
                 baseMap = ({
@@ -98,15 +53,19 @@ var roomManager = {
 
 
             var baseMap2 = ({
-//                ['XO-'+spawnMapName+'-3-'+room.name]: {role: 'lorry', bodyparts: this.baseBodies('lorry', room.energyCapacityAvailable-100), autoSpawn: true, harvestThreshold: 600, required: spawnConfiguration.required },
                 ['XU-'+spawnMapName+'-1-'+room.name]: {role: 'upgrader', bodyparts: this.baseBodies('upgrader', room.energyAvailable), autoSpawn: true, required: spawnConfiguration.required },
                 ['XR-'+spawnMapName+'-1-'+room.name]: {role: 'roadworker', bodyparts: this.baseBodies('roadworker', room.energyAvailable), autoSpawn: true, required: spawnConfiguration.required },
+                ['XO-'+spawnMapName+'-3-'+room.name]: {role: 'lorry', bodyparts: this.baseBodies('lorry', room.energyCapacityAvailable-100), autoSpawn: true, harvestThreshold: 600, required: spawnConfiguration.required },
 //                ['XO-'+spawnMapName+'-4-'+room.name]: {role: 'lorry', bodyparts: this.baseBodies('lorry', room.energyCapacityAvailable-100), autoSpawn: true, harvestThreshold: 1000, required: spawnConfiguration.required },
-                ['XE-'+spawnMapName+'-1-'+room.name]: {role: 'terminalEqualizer', bodyparts: [CARRY,CARRY,MOVE], autoSpawn: true, required: spawnConfiguration.required },
+//                ['XE-'+spawnMapName+'-1-'+room.name]: {role: 'terminalEqualizer', bodyparts: [CARRY,CARRY,MOVE], autoSpawn: true, required: spawnConfiguration.required },
 //                ['XE-'+spawnMapName+'-2-'+room.name]: {role: 'terminalEqualizer', bodyparts: [CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY], autoSpawn: true, required: spawnConfiguration.required },
 //                ['XU-'+spawnMapName+'-2-'+room.name]: {role: 'upgrader', bodyparts: this.baseBodies('upgrader', room.energyCapacityAvailable), autoSpawn: true, required: spawnConfiguration.required },
 //                ['XR-'+spawnMapName+'-2-'+room.name]: {role: 'roadworker', bodyparts: this.baseBodies('roadworker', room.energyCapacityAvailable), autoSpawn: true, required: spawnConfiguration.required },
             })
+            if (room.storage ){
+                baseMap2['XE-'+spawnMapName+'-1-'+room.name]=
+                    {role: 'terminalEqualizer', bodyparts: [CARRY,CARRY,MOVE], autoSpawn: true, required: spawnConfiguration.required }
+            }
             if (room.level <=4){
                 baseMap2['XO-'+spawnMapName+'-4-'+room.name]=
                     {role: 'lorry', bodyparts: this.baseBodies('lorry', room.energyCapacityAvailable-100), autoSpawn: true, harvestThreshold: 1000, required: spawnConfiguration.required }
@@ -125,10 +84,21 @@ var roomManager = {
                     {role: 'attacker', sf: spawnConfiguration.sf, ar: spawnConfiguration.ar, sf: spawnConfiguration.sf, bodyparts: this.baseBodies('attacker', room.energyAvailable), autoSpawn: true, required: spawnConfiguration.required}
             }
             return baseMap
+        } else if (spawnMapName == 'attackerGood'){
+            for (i=1;i<=spawnConfiguration.copy;i++){
+                baseMap['X-'+spawnMapName+'-'+i+'-'+room.name+'-'+spawnConfiguration.sf]=
+                    {role: 'attacker', sf: spawnConfiguration.sf, ar: spawnConfiguration.ar, sf: spawnConfiguration.sf, bodyparts: this.baseBodies('attackerGood', room.energyCapacityAvailable), autoSpawn: true, required: spawnConfiguration.required}
+            }
+            return baseMap
         } else if (spawnMapName == 'roadworker'){
             for (i=1;i<=spawnConfiguration.copy;i++){
                 baseMap['XR-'+spawnMapName+'-'+i+'-'+room.name]=
                     {role: 'roadworker', sf: spawnConfiguration.sf,  room: spawnConfiguration.room, bodyparts: this.baseBodies('roadworker', room.energyCapacityAvailable), autoSpawn: true, required: spawnConfiguration.required }
+            }
+        } else if (spawnMapName == 'roadworkerFast'){
+            for (i=1;i<=spawnConfiguration.copy;i++){
+                baseMap['XR-'+spawnMapName+'-'+i+'-'+room.name]=
+                    {role: 'roadworker', sf: spawnConfiguration.sf,  room: spawnConfiguration.room, bodyparts: this.baseBodies('roadworkerFast', room.energyCapacityAvailable), autoSpawn: true, required: spawnConfiguration.required }
             }
         } else if (spawnMapName == 'labworker'){
             for (i=1;i<=spawnConfiguration.copy;i++){
@@ -139,7 +109,12 @@ var roomManager = {
         } else if (spawnMapName == 'upgrader'){
             for (i=1;i<=spawnConfiguration.copy;i++){
                 baseMap['XU-'+spawnMapName+'-'+i+'-'+room.name]=
-                    {role: 'upgrader', room: spawnConfiguration.room, bodyparts: this.baseBodies('upgrader', room.energyCapacityAvailable), autoSpawn: true, required: spawnConfiguration.required }
+                    {role: 'upgrader', room: spawnConfiguration.room, via: spawnConfiguration.via, bodyparts: this.baseBodies('upgrader', room.energyCapacityAvailable), autoSpawn: true, required: spawnConfiguration.required }
+            }
+        } else if (spawnMapName == 'upgraderFast'){
+            for (i=1;i<=spawnConfiguration.copy;i++){
+                baseMap['XU-'+spawnMapName+'-'+i+'-'+room.name]=
+                    {role: 'upgrader', room: spawnConfiguration.room, via: spawnConfiguration.via, bodyparts: this.baseBodies('upgraderFast', room.energyCapacityAvailable), autoSpawn: true, required: spawnConfiguration.required }
             }
         } else if (spawnMapName == 'energyDelivery'){
             for (i=1;i<=spawnConfiguration.copy;i++){
@@ -200,24 +175,24 @@ var roomManager = {
         } else if (spawnMapName == 'remoteConstruction'){
             var i
 
-            if (spawnConfiguration.sf && Game.flags[spawnConfiguration.sf] && Game.flags[spawnConfiguration.sf].room && !Game.flags[spawnConfiguration.sf].room.controller.my){
-                baseMap['XC-'+spawnMapName+'1-'+room.name+'-'+spawnConfiguration.sf] =
-                    {role: 'claimer', sf: spawnConfiguration.sf, claim: true, bodyparts: mainHelper.getBody(1,CLAIM,1,MOVE), required: spawnConfiguration.required}
+            if (Game.rooms[spawnConfiguration.room] && !Game.rooms[spawnConfiguration.room].controller.my){
+                baseMap['XC-'+spawnMapName+'1-'+room.name+'-'+spawnConfiguration.room] =
+                    {role: 'claimer', via: spawnConfiguration.via, room: spawnConfiguration.room, sf: spawnConfiguration.sf, claim: true, bodyparts: mainHelper.getBody(5,TOUGH,1,CLAIM,6,MOVE), required: spawnConfiguration.required}
             }
             if (Game.rooms[spawnConfiguration.room]){
                 Game.rooms[spawnConfiguration.room].find(FIND_SOURCES).sort(function(a, b){return a.id - b.id}).forEach((source, index)=>{
 //                console.log(source.id)
                 baseMap['XD-'+spawnMapName+'-'+(index+1)+'-'+room.name+'-'+spawnConfiguration.room]=
-                    {role: 'dropper', sId: source.id, room: spawnConfiguration.room, bodyparts: this.baseBodies('dropper', room.energyCapacityAvailable), autoSpawn: true, required: spawnConfiguration.required}
+                    {role: 'dropper', via: spawnConfiguration.via, sId: source.id, room: spawnConfiguration.room, bodyparts: this.baseBodies('dropper', room.energyCapacityAvailable), autoSpawn: true, required: spawnConfiguration.required}
                 })
 //                console.log("FOUND ROOM " +spawnConfiguration.room)
             }
 
             for (i=1;i<=spawnConfiguration.copy;i++){
-                baseMap['XU-'+spawnMapName+''+i+'-'+room.name+'-'+spawnConfiguration.sf] =
-                    {role: 'upgrader', sf: spawnConfiguration.sf, bodyparts: roomManager.baseBodies('roadworkerFast', room.energyAvailable), required: spawnConfiguration.required}
-                baseMap['XR-'+spawnMapName+''+i+'-'+room.name+'-'+spawnConfiguration.sf]=
-                    {role: 'roadworker', sf: spawnConfiguration.sf, room: spawnConfiguration.room, bodyparts: this.baseBodies('roadworkerFast', room.energyCapacityAvailable), autoSpawn: true, required: spawnConfiguration.required}
+                baseMap['XU-'+spawnMapName+''+i+'-'+room.name+'-'+spawnConfiguration.room] =
+                    {role: 'upgrader', via: spawnConfiguration.via, sf: spawnConfiguration.sf, room: spawnConfiguration.room, bodyparts: roomManager.baseBodies('roadworkerFast', room.energyAvailable), required: spawnConfiguration.required}
+                baseMap['XR-'+spawnMapName+''+i+'-'+room.name+'-'+spawnConfiguration.room]=
+                    {role: 'roadworker', via: spawnConfiguration.via, sf: spawnConfiguration.sf, room: spawnConfiguration.room, bodyparts: this.baseBodies('roadworkerFast', room.energyCapacityAvailable), autoSpawn: true, required: spawnConfiguration.required}
             }
         }
         return baseMap
@@ -272,6 +247,22 @@ var roomManager = {
                     {energy: 1300, body: mainHelper.getBody(8,WORK,4,CARRY,6,MOVE)},
                     {energy: 1550, body: mainHelper.getBody(10,WORK,4,CARRY,7,MOVE)},
                     {energy: 1800, body: mainHelper.getBody(12,WORK,4,CARRY,8,MOVE)},
+                ]
+            },
+            {
+                role: 'upgraderFast',
+                bodies: [
+                    {energy: 0, body: mainHelper.getBody(2,WORK,1,CARRY,3,MOVE)},
+                    {energy: 350, body: mainHelper.getBody(2,WORK,1,CARRY,3,MOVE)},
+                    {energy: 550, body: mainHelper.getBody(2,WORK,2,CARRY,4,MOVE)},
+                    {energy: 650, body: mainHelper.getBody(2,WORK,3,CARRY,5,MOVE)},
+                    {energy: 800, body: mainHelper.getBody(3,WORK,3,CARRY,6,MOVE)},
+                    {energy: 1100, body: mainHelper.getBody(4,WORK,4,CARRY,8,MOVE)},
+                    {energy: 1400, body: mainHelper.getBody(5,WORK,4,CARRY,9,MOVE)},
+                    {energy: 1500, body: mainHelper.getBody(6,WORK,4,CARRY,10,MOVE)},
+                    {energy: 1700, body: mainHelper.getBody(8,WORK,4,CARRY,12,MOVE)},
+                    {energy: 2000, body: mainHelper.getBody(10,WORK,4,CARRY,14,MOVE)},
+                    {energy: 2400, body: mainHelper.getBody(12,WORK,4,CARRY,16,MOVE)},
                 ]
             },
             {
@@ -350,6 +341,17 @@ var roomManager = {
                     {energy: 300, body: mainHelper.getBody(2,ATTACK,2,MOVE)},
                     {energy: 600, body: mainHelper.getBody(4,ATTACK,4,MOVE)},
                     {energy: 900, body: mainHelper.getBody(6,ATTACK,6,MOVE)},
+
+                ]
+            },
+            {
+                role: 'attackerGood',
+                bodies: [
+                    {energy: 0, body: mainHelper.getBody(3,TOUGH,1,ATTACK,4,MOVE)},
+                    {energy: 400, body: mainHelper.getBody(3,TOUGH,2,ATTACK,5,MOVE)},
+                    {energy: 800, body: mainHelper.getBody(3,TOUGH,4,ATTACK,7,MOVE)},
+                    {energy: 1100, body: mainHelper.getBody(3,TOUGH,6,ATTACK,9,MOVE)},
+                    {energy: 1600, body: mainHelper.getBody(5,TOUGH,8,ATTACK,13,MOVE)},
 
                 ]
             },
@@ -438,10 +440,12 @@ var roomManager = {
 
             var energyAmount =  Math.min(linksSorted[0].energy, 800-(linksSorted[linksSorted.length-1].energy)) - 2
 
+if (Game.time % 5 == 0){
             var transfer = linksSorted[0].transferEnergy(linksSorted[linksSorted.length-1], energyAmount);
             Memory.linkMode[linksSorted[0].id]='send'
             Memory.linkMode[linksSorted[linksSorted.length-1].id]='receive'
             console.log("transfer: "+ transfer + " amount: " + energyAmount)
+}
         }
 
         var minLink = linksSorted[linksSorted.length-1];
@@ -456,7 +460,7 @@ var roomManager = {
     if (!room.memory.repair){
     	var repairSite = room.find(FIND_STRUCTURES, {
 		filter: function(object){
-			return ((object.structureType === STRUCTURE_ROAD || object.structureType === STRUCTURE_CONTAINER || object.structureType == STRUCTURE_TOWER ) && (object.hits < (object.hitsMax-500)) || (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART) && (object.hits < (300000)));
+			return ((object.structureType === STRUCTURE_ROAD || object.structureType === STRUCTURE_CONTAINER || object.structureType == STRUCTURE_TOWER ) && (object.hits < (object.hitsMax-500)) || (object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART) && (object.hits < (1000000)));
 		   }
 		});
         if (repairSite.length > 0) room.memory.repair = true

@@ -3,7 +3,10 @@ var roleDropper = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
-        if ((creep.hits < creep.hitsMax) && Game.rooms[creep.memory.spawnRoomName]) {
+
+
+
+        if ((creep.hits < creep.hitsMax-200) && Game.rooms[creep.memory.spawnRoomName]) {
             creep.say("flee")
             creep.moveTo(Game.rooms[creep.memory.spawnRoomName].controller)
             return (0)
@@ -12,9 +15,8 @@ var roleDropper = {
 //  creep.moveTo(24,37)
 //    return(0)
   }
-        var rescode = creep.memory.rescode?creep.memory.rescode:RESOURCE_ENERGY
-
-        var res = creep.memory.res?creep.memory.res:'energy'
+        var mineral = creep.memory.mineral?creep.memory.mineral:false
+//    creep.say(mineral)
 
         var flag = Game.flags[creep.memory.sf]
         if (!creep.memory.sf){
@@ -28,15 +30,16 @@ var roleDropper = {
             creep.say("Panik")
             return(0)
         }
-
         if(!creep.pos.inRangeTo(flag,2)) {
+
+             creep.say("inrange")
             creep.moveTo(flag, {visualizePathStyle: {stroke: '#00ffff'}})
             if (creep.room.controller && !creep.room.controller.my){
                 creep.room.createConstructionSite(creep.pos.x,creep.pos.y, STRUCTURE_ROAD)
             }
         } else  {
             let source
-            if (creep.memory.rescode){
+            if (mineral){
                 source = creep.pos.findClosestByRange(FIND_MINERALS)
             } else {
                 source = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE)
@@ -47,7 +50,7 @@ var roleDropper = {
             if(harvestResult == ERR_NOT_IN_RANGE) {
                 creep.moveTo(source, {visualizePathStyle: {stroke: '#00ffff'}});
             }
-            if(creep.carry[res] >= 30 ){
+            if(creep.carry[RESOURCE_ENERGY] >= 30 ){
             	var buildSite = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES,3);
                 if (buildSite){
                     creep.build(buildSite)
@@ -55,9 +58,9 @@ var roleDropper = {
                 }
             }
 //            creep.drop(RESOURCE_ENERGY)
-            if(creep.carry[res] >= 10){
+            if(creep.carry[RESOURCE_ENERGY] >= 10){
 
-                if(creep.carry[res] > (creep.carryCapacity-creep.getActiveBodyparts(WORK)*2)){
+                if(creep.carry[RESOURCE_ENERGY] > (creep.carryCapacity-creep.getActiveBodyparts(WORK)*2)){
 
                     var containerSite = creep.pos.findClosestByRange(FIND_STRUCTURES, {
             		        filter: function(object){
@@ -72,8 +75,8 @@ var roleDropper = {
                             creep.repair(containerSite)
                         } else {
 //creep.say("store")
-                            if(creep.transfer(containerSite, rescode) == ERR_NOT_IN_RANGE) {
-            		    creep.moveTo(containerSite, {visualizePathStyle: {stroke: '#00ffff'}});
+                            if(creep.transfer(containerSite, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+            		            creep.moveTo(containerSite, {visualizePathStyle: {stroke: '#00ffff'}});
                             }
                         }
                     } else {
@@ -95,12 +98,16 @@ var roleDropper = {
     //                            creep.repair(creep.pos.findInRange(FIND_STRUCTURES,3, {filter: function(a){return (a.structureType == STRUCTURE_CONTAINER)}})[0])
                                 creep.say("drop")
     //                            console.log("drop", creep.name)
-                                creep.drop(rescode,5)
+                                creep.drop(RESOURCE_ENERGY,5)
             		         }
 
                         }
 
                     }
+                }
+            } else if(_.sum(creep.carry) >= 10){
+                for(var r in creep.carry){
+                 creep.say(creep.transfer(creep.room.storage, r))
                 }
             }
 

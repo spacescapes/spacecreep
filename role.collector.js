@@ -8,23 +8,34 @@ o.run = function(creep)  {
     if (_.sum(creep.carry) == 0){
         if (creep.memory.room && (creep.room.name != creep.memory.room)){
             var exit = creep.room.findExitTo(creep.memory.room);
-            creep.moveTo(creep.pos.findClosestByRange(exit), {visualizePathStyle: {stroke: '#00ffff'}});
+            creep.moveTo(creep.pos.findClosestByPath(exit), {visualizePathStyle: {stroke: '#00ffff'}});
             return(0)
         }
         var resource = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES,
             {filter: function(object){return object.room.name == creep.room.name /*&& object.resourceType!=RESOURCE_ENERGY*/}});
 
-//        creep.moveTo(resource);
-
-         var containerSite = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+        if (resource && _.sum(creep.carry) == 0){
+            creep.moveTo(resource);
+            creep.pickup(resource)
+        } else if (resource){
+            creep.pickup(resource)
+        }
+         var containerSite = creep.pos.findClosestByPath(FIND_HOSTILE_STRUCTURES, {
                     filter: function(object){
-                        return ( object.structureType == STRUCTURE_CONTAINER  || object.structureType == STRUCTURE_TERMINAL ) && ((Object.keys(object.store).filter((r) => r != RESOURCE_ENERGY).length)>0);
+                        return ( object.structureType == STRUCTURE_STORAGE ) && ((Object.keys(object.store).filter((r) => r != RESOURCE_ENERGY).length)>0);
                     }
                 });
         if (!containerSite){
+          containerSite = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                    filter: function(object){
+                        return (  object.structureType == STRUCTURE_CONTAINER ) && ((Object.keys(object.store).filter((r) => r != RESOURCE_ENERGY).length)>0);
+                    }
+                });
+        }
+        if (!containerSite){
             containerSite = creep.pos.findClosestByPath(FIND_HOSTILE_STRUCTURES, {
                     filter: function(object){
-            			return ((object.structureType == STRUCTURE_EXTENSION && object.energy > 0 ) ||  ( object.structureType === STRUCTURE_CONTAINER && object.store.energy > 100) || ( object.structureType === STRUCTURE_TOWER && object.energy > 0) ||  ( object.structureType === STRUCTURE_TERMINAL && object.store.energy > 100) ||  ( object.structureType === STRUCTURE_STORAGE && object.store.energy > 1000) ||  ( object.structureType === STRUCTURE_LINK && object.energy > 0) ||  ( object.structureType === STRUCTURE_SPAWN && object.energy > 0) ||  ( object.structureType === STRUCTURE_POWER_SPAWN && object.energy > 0) || ( object.structureType === STRUCTURE_LAB && object.energy > 0) );
+            			return ((object.structureType == STRUCTURE_EXTENSION && object.energy > 0 ) ||  ( object.structureType === STRUCTURE_CONTAINER && object.store.energy > 100) || ( object.structureType === STRUCTURE_TOWER && object.energy > 0) ||  ( object.structureType === STRUCTURE_TERMINAL && object.store.energy > 100) ||  ( object.structureType === STRUCTURE_STORAGE && _.sum(object.store) > 1000) ||  ( object.structureType === STRUCTURE_LINK && object.energy > 0) ||  ( object.structureType === STRUCTURE_SPAWN && object.energy > 0) ||  ( object.structureType === STRUCTURE_POWER_SPAWN && object.energy > 0) || ( object.structureType === STRUCTURE_LAB && object.energy > 0) );
                     }
                 });
         }
@@ -35,13 +46,17 @@ o.run = function(creep)  {
             if (containerSite.structureType == STRUCTURE_LINK || containerSite.structureType == STRUCTURE_EXTENSION || containerSite.structureType == STRUCTURE_TOWER || containerSite.structureType == STRUCTURE_LAB || containerSite.structureType == STRUCTURE_SPAWN ){
                 creep.withdraw(containerSite, RESOURCE_ENERGY)
             } else {
+                var done = false
                 for(var r in containerSite.store){
                     if (r != RESOURCE_ENERGY){
                         creep.withdraw(containerSite, r)
-        //            if (containerSite.store[res]){
-        //                creep.say()
+                        done = true
                     }
                 }
+                if (!done){
+                    creep.withdraw(containerSite, RESOURCE_ENERGY)
+                }
+
             }
 //            creep.say(JSON.stringify(Object.keys(containerSite.store).filter((r) => r != RESOURCE_ENERGY).length))
 
