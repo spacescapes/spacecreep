@@ -22,6 +22,9 @@ var roomManager = require('room.manager');
 
 Memory.ta={}
 
+Creep.test = function(creep){
+    creep.say("CREEP")
+}
 
 module.exports.loop = function () {
     console.log("-------------")
@@ -29,25 +32,28 @@ module.exports.loop = function () {
     //    return(0)
     }
 
-Game.getObjectById("5c4b7d9fe9e68c62bcfead2c").observeRoom("W47N43")
 
-for (var g in Game.constructionSites){if (Game.constructionSites[g].progress == 0 && Game.constructionSites[g].structureType == STRUCTURE_ROAD) {Game.constructionSites[g].remove()}}
+//    var buyResources = new Array(RESOURCE_CATALYZED_UTRIUM_ACID,RESOURCE_CATALYZED_ZYNTHIUM_ALKALIDE,RESOURCE_CATALYZED_LEMERGIUM_ALKALIDE,RESOURCE_CATALYZED_GHODIUM_ALKALIDE,RESOURCE_CATALYZED_GHODIUM_ACID)
+    var buyResources = new Array(RESOURCE_CATALYZED_UTRIUM_ACID)
+    for (var resource of buyResources){
+//        console.log("check: "+ resource + " " + dealResult + " " + Game.rooms["W48N51"].terminal.store[resource])
+        if (!Game.rooms["W48N54"].terminal.store[resource] || (Game.rooms["W48N54"].terminal.store[resource] < 5000)){
+//            var sellOrders = Game.market.getAllOrders({type: ORDER_SELL, resourceType: resource});
+//            var minOrder = _.min(sellOrders, ((a) => (a.price)));
+//            var dealResult = Game.market.deal(minOrder.id, 1000, "W48N54")
+//            console.log("buy: "+ resource + " " + dealResult)
+        }
 
-//Game.rooms.W42N35.controller.activateSafeMode()
-if (Game.rooms["W37N48"]) Game.rooms["W37N48"].createConstructionSite(23,13,STRUCTURE_SPAWN)
-if (Game.rooms["W39N49"]) Game.rooms["W39N49"].createConstructionSite(31,33,STRUCTURE_SPAWN)
-if (Game.rooms["W39N49"]) Game.rooms["W39N49"].createConstructionSite(31,33,STRUCTURE_RAMPART)
-if (Game.rooms["W42N43"]) Game.rooms["W42N43"].createConstructionSite(11,34,STRUCTURE_WALL)
-if (Game.rooms["W42N43"]) Game.rooms["W42N43"].createConstructionSite(11,35,STRUCTURE_WALL)
-if (Game.rooms["W42N43"]) Game.rooms["W42N43"].createConstructionSite(11,36,STRUCTURE_WALL)
-if (Game.rooms["W42N43"]) Game.rooms["W42N43"].createConstructionSite(10,36,STRUCTURE_WALL)
-if (Game.rooms["W42N43"]) Game.rooms["W42N43"].createConstructionSite(9,36,STRUCTURE_WALL)
-if (Game.rooms["W44N43"]) Game.rooms["W44N43"].createConstructionSite(16,23,STRUCTURE_SPAWN)
-if (Game.rooms["W44N43"]) Game.rooms["W44N43"].createConstructionSite(16,23,STRUCTURE_RAMPART)
-if (Game.rooms["W46N33"]) Game.rooms["W46N33"].createConstructionSite(10,17,STRUCTURE_SPAWN)
-if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRUCTURE_SPAWN)
-if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRUCTURE_RAMPART)
+    }
 
+//Game.getObjectById("5c4b7d9fe9e68c62bcfead2c").observeRoom("W47N43")
+
+//for (var g in Game.constructionSites){if (Game.constructionSites[g].progress == 0 && Game.constructionSites[g].structureType == STRUCTURE_ROAD) {Game.constructionSites[g].remove()}}
+
+//Game.getObjectById("5c9595f307b8cc5ff5ddc2af").send(RESOURCE_ENERGY, 600, "W48N46")
+//Game.getObjectById("5c07a8f4806a5c4c7a0490b0").send(RESOURCE_ENERGY, 600, "W48N46")
+//Game.rooms.W42N43.controller.activateSafeMode()
+    mainHelper.buildSetup()
     mainHelper.marketTrade()
 
 //    console.log("send: "+Game.getObjectById('5c06f54b77ed0b360efdb7b8').send(RESOURCE_ENERGY, 100000, 'W49N49'))
@@ -73,6 +79,7 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
             {
                 room: {
                     spawnMaps: [
+//                    {name: "roadworkerFast", copy: 4, room: 'W43N43', via: 'V3'},
                         {name: "custom",
                         creeps: {
 //                            'Lenemy2': {role: "labworker", sf: 'Senemy1', tf: 'S1', resource: 'L', recycleAfterDelivery: true, bodyparts: mainHelper.getBody(8,CARRY,8,MOVE)},
@@ -81,10 +88,16 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
 //                            'LSupport3': {role: "labworker", tf: 'S4', recycleAfterDelivery: true, bodyparts: mainHelper.getBody(8,CARRY,8,MOVE)},
 //                            'LSupport4': {role: "labworker", tf: 'S3', recycleAfterDelivery: true, bodyparts: mainHelper.getBody(8,CARRY,8,MOVE)},
 //                            'L2': {role: "labworker", tf: 'S1', bodyparts: mainHelper.getBody(8,CARRY,8,MOVE)},
+/*
+                            'A1': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getMixedBody(1,MOVE,ATTACK), ar: 40, via: 'V1', boost: true},
 
-//                            'A1': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getBody(25,MOVE,24,ATTACK,1,HEAL), ar: 40},
-//                            'A2': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getBody(25,MOVE,24,RANGED_ATTACK,1,HEAL), ar: 40},
-//                            'H1': {role: "healer", sf: 'A5', bodyparts: mainHelper.getBody(25,MOVE,25,HEAL)},
+                            'H1': {role: "healer", sf: 'A5', bodyparts: mainHelper.getMixedBody(25,MOVE,HEAL), via: 'V1'},
+                            'A2': {role: "attacker", sf: 'A2', bodyparts: mainHelper.getMixedBody(25,MOVE,ATTACK), ar: 40, via: 'V1'},
+                            'H2': {role: "healer", sf: 'A2', bodyparts: mainHelper.getMixedBody(25,MOVE,HEAL), via: 'V1'},
+                            'H3': {role: "healer", sf: 'A1', bodyparts: mainHelper.getMixedBody(25,MOVE,HEAL), via: 'V1'},
+*/
+/*
+*/
                             },
 //                            excludeRoom: "W49N49"
                         },
@@ -100,10 +113,15 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
                     debug: false,
                     spawnMaps: [
                         {name: "baseLorry", required: true, build: 'ur'},
+//                        {name: "labworker", required: true, copy: 2},
 //                        {name: "energyDelivery", room: 'W48N46', copy: 4},
-                        {name: "energyDelivery", room: 'W47N44', copy: 2},
+//                        {name: "energyDelivery", room: 'W47N44', copy: 4},
+//                        {name: "energyDelivery", room: 'W49N49', copy: 4},
+//                        {name: "roadworker", copy: 3, room: 'W49N49' },
 //                        {name: "upgrader", copy: 1},
-//                        {name: "roadworker", copy: 1 },
+                        {name: "roadworker", copy: 1 },
+//                        {name: "roadworkerFast", copy: 1, room: 'W43N43' },
+//                        {name: "upgraderFast", copy: 1, room: 'W43N43' },
 
 //                        {name: "claim", room: 'W47N51', required: true},
 
@@ -115,6 +133,34 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
 
                         {name: "custom",
                         creeps:{
+
+//                            'A1': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getMixedBody(1,MOVE,ATTACK), ar: 40, via: 'V1', boost: true},
+
+/*
+                            'A2': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getMixedBodyGood(1,[MOVE,ATTACK],1,[HEAL]), ar: 40, via: 'V1', boost: true},
+                            'A1': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getMixedBodyGood(5,[TOUGH],30,[ATTACK],12,[MOVE], 3,[HEAL]), ar: 40, via: 'V1', boost: true},
+                            'A3': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getMixedBodyGood(5,[TOUGH],30,[ATTACK],12,[MOVE], 3,[HEAL]), ar: 40, via: 'V1', boost: true},
+                            'A5': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getMixedBodyGood(5,[TOUGH],30,[ATTACK],12,[MOVE], 3,[HEAL]), ar: 40, via: 'V1', boost: true},
+
+                            'A6': {role: "attacker", sf: 'A7', bodyparts: mainHelper.getMixedBodyGood(5,[TOUGH],30,[ATTACK],12,[MOVE], 3,[HEAL]), ar: 40,  boost: true},
+
+
+                            'H5': {role: "healer", sf: 'A2', bodyparts: mainHelper.getMixedBodyGood(3,[TOUGH],3,[HEAL],6,[MOVE]),  via: 'V1'},
+                            'H3': {role: "healer", sf: 'A5', bodyparts: mainHelper.getMixedBodyGood(13,[TOUGH],25,[HEAL],12,[MOVE]), follow: 'A1', via: 'V1', boost: true},
+                            'H4': {role: "healer", sf: 'A5', bodyparts: mainHelper.getMixedBodyGood(13,[TOUGH],25,[HEAL],12,[MOVE]), follow: 'A1', via: 'V1', boost: true},
+*/
+
+/*
+                            'A41': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getMixedBody(25,ATTACK,MOVE), ar: 40, via: 'V1'},
+                            'A42': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getMixedBody(25,ATTACK,MOVE), ar: 40, via: 'V1'},
+                            'A43': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getMixedBody(25,ATTACK,MOVE), ar: 40, via: 'V1'},
+//                            'A54': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getMixedBody(25,ATTACK,MOVE), ar: 40},
+//                            'A45': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getMixedBody(25,RANGED_ATTACK,MOVE), ar: 40, via: 'V1'},
+                            'H41': {role: "healer", sf: 'A5', bodyparts: mainHelper.getMixedBody(25,HEAL,MOVE), follow: 'A41', via: 'V1'},
+                            'H42': {role: "healer", sf: 'A5', bodyparts: mainHelper.getMixedBody(25,HEAL,MOVE), follow: 'A41', via: 'V1'},
+                            'H43': {role: "healer", sf: 'A5', bodyparts: mainHelper.getMixedBody(25,HEAL,MOVE), follow: 'A41', via: 'V1'},
+                            'H44': {role: "healer", sf: 'A5', bodyparts: mainHelper.getMixedBody(25,HEAL,MOVE), follow: 'A41', via: 'V1'},
+*/
 //                            'H2B': {role: "healer", sf: 'A2', bodyparts: mainHelper.getBody(25,HEAL,25,MOVE), follow: 'A2B'},
 //                            'A2B': {role: "attacker", sf: 'A2', bodyparts: mainHelper.getBody(20,ATTACK,21,MOVE,1,HEAL), follower: 'H2B', ar: 40},
 //                        'A1C': {role: "attacker", sf: 'A6', bodyparts: mainHelper.getBody(21,MOVE,1,CARRY,20,ATTACK), follower: 'H1C'},
@@ -142,8 +188,12 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
 
                         {name: "remoteHarvest", room: 'W47N51', copy: 1},
                         {name: "remoteHarvest", room: 'W49N51', copy: 2},
-//                        {name: "remoteConstruction", room: 'W37N48', copy: 1},
-                        {name: "remoteConstruction", room: 'W39N49', copy: 3},
+                        {name: "remoteConstruction", room: 'W48N52', copy: 1},
+                        {name: "remoteConstruction", room: 'W48N54', copy: 2},
+
+//                        {name: "remoteConstruction", room: 'W49N49', copy: 3},
+//                        {name: "remoteConstruction", room: 'W39N49', copy: 3},
+//                        {name: "remoteConstruction", room: 'W39N47', copy: 3},
 
                         ]
                 }
@@ -154,12 +204,13 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
                     construct: false,
                     spawnMaps: [
                         {name: "baseLorry", required: true},
-//                        {name: "remoteConstruction", sf: 'C1', copy: 3, required: true},
+//                        {name: "remoteConstruction", room: 'W48N51', copy: 2},
 //                        {name: "roadworker", copy: 3 },
                         {name: "custom",
                         creeps:{
-                            'DM1': {role: 'dropper', sf: 'M1', mineral: true, bodyparts: mainHelper.getBody(10,WORK,5,MOVE)},
-                            'Co1': {role: 'collector', bodyparts: mainHelper.getBody(2,CARRY,1,MOVE)},
+//                        'A31': {role: 'attacker', sf: 'A7', ar: 40, copy: 3, bodyparts: mainHelper.getBody(4,TOUGH,4,ATTACK,4,MOVE)},
+//                            'DM1': {role: 'dropper', sf: 'M1', mineral: true, bodyparts: mainHelper.getBody(10,WORK,5,MOVE)},
+//                            'Co1': {role: 'collector', bodyparts: mainHelper.getBody(2,CARRY,1,MOVE)},
 // 'L122': {role: 'labworker', sf: 'S3', tf: 'container2', bodyparts: mainHelper.getBody(10,CARRY,5,MOVE)},
 /*
                         'L1xxx': {role: "labworker", tf: 'S1', resource: 'UH', recycleAfterDelivery: true, bodyparts: mainHelper.getBody(2,CARRY,1,MOVE)},
@@ -170,7 +221,7 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
 
                         }},
 
-                        {name: "upgrader", copy: 2},
+                        {name: "upgrader", copy: 1},
 //                        {name: "collector"},
 //                        {name: "worker", copy: 2},
 //                        {name: "roadworker", copy: 4},
@@ -214,7 +265,7 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
             W43N43:
             {
                 room: {
-                    construct: true,
+                    construct: false,
                     debug: false,
                     roads: false,
                     spawnMaps: [
@@ -272,14 +323,38 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
                         {name: "baseLorry", required: true},
 //                         {name: "energyDelivery", room: 'W48N46', copy: 4},
 //                        {name: "attacker", sf: 'A6', ar: 30, copy: 1, required: true},
-                         {name: "roadworker", copy: 6, room: 'W48N46'},
+                        {name: "remoteConstruction", room: 'W47N44',  copy: 1},
+//                        {name: "remoteConstruction", room: 'W47N46',  copy: 3, via: 'V2'},
+                        {name: "remoteConstruction", room: 'W48N46',  copy: 1},
+                        {name: "roadworker", room: 'W48N46',  copy: 1},
+//                        {name: "upgraderFast", room: 'W43N43',  copy: 1},
+//                        {name: "roadworkerFast", room: 'W43N43',  copy: 1},
+
+//                         {name: "roadworkerSmall2", copy: 15, room: 'W48N46'},
+//                         {name: "roadworkerFast", copy: 5, room: 'W47N44', via: 'V2'},
+//                         {name: "roadworkerFast", copy: 10, room: 'W43N43', via: 'V2'},
+
+//                         {name: "upgraderFast", copy: 5, room: 'W43N43', via: 'V2'},
+//                         {name: "upgraderFast", copy: 5, room: 'W42N43', via: 'V2'},
+
                          {name: "custom",
                         creeps:{
-                            'A51': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getBody(24,ATTACK,25,MOVE,1,HEAL), ar: 40},
-//                            'A55': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getBody(25,MOVE,24,RANGED_ATTACK,1,HEAL), ar: 40},
-                            'H51': {role: "healer", sf: 'A5', bodyparts: mainHelper.getBody(25,HEAL,25,MOVE), follow: 'A51'},
-                            'H52': {role: "healer", sf: 'A5', bodyparts: mainHelper.getBody(25,HEAL,25,MOVE), follow: 'A51'},
-                            'H53': {role: "healer", sf: 'A5', bodyparts: mainHelper.getBody(25,HEAL,25,MOVE), follow: 'A51'},
+/*
+                            'A51': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getMixedBody(25,ATTACK,MOVE), ar: 40, via: 'V1'},
+                            'A52': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getMixedBody(25,ATTACK,MOVE), ar: 40, via: 'V1'},
+                            'A53': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getMixedBody(25,ATTACK,MOVE), ar: 40, via: 'V1'},
+//                            'A54': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getMixedBody(25,ATTACK,MOVE), ar: 40},
+                            'A55': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getMixedBody(25,RANGED_ATTACK,MOVE), ar: 40, via: 'V1'},
+                            'H51': {role: "healer", sf: 'A5', bodyparts: mainHelper.getMixedBody(25,HEAL,MOVE), follow: 'A51', via: 'V1'},
+                            'H52': {role: "healer", sf: 'A5', bodyparts: mainHelper.getMixedBody(25,HEAL,MOVE), follow: 'A51', via: 'V1'},
+                            'H53': {role: "healer", sf: 'A5', bodyparts: mainHelper.getMixedBody(25,HEAL,MOVE), follow: 'A51', via: 'V1'},
+                            'H54': {role: "healer", sf: 'A5', bodyparts: mainHelper.getMixedBody(25,HEAL,MOVE), follow: 'A51', via: 'V1'},
+*/
+//                            'A21': {role: "attacker", sf: 'A2', bodyparts: mainHelper.getMixedBody(25,ATTACK,MOVE), ar: 40, via: 'V1'},
+//                            'A22': {role: "attacker", sf: 'A2', bodyparts: mainHelper.getMixedBody(25,ATTACK,MOVE), ar: 40, via: 'V1'},
+//                            'H21': {role: "healer", sf: 'A2', bodyparts: mainHelper.getMixedBody(25,HEAL,MOVE), follow: 'A21', via: 'V1'},
+//                            'H22': {role: "healer", sf: 'A2', bodyparts: mainHelper.getMixedBody(25,HEAL,MOVE), follow: 'A22', via: 'V1'},
+
 
 //                        'LSupport31': {role: "labworker", tf: 'S10', recycleAfterDelivery: true, bodyparts: mainHelper.getBody(14,CARRY,14,MOVE)},
 //                        'LSupport32': {role: "labworker", tf: 'S10', recycleAfterDelivery: true, bodyparts: mainHelper.getBody(14,CARRY,14,MOVE)},
@@ -302,16 +377,28 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
                 room: {
                     construct: true,
                     debug: false,
-                    boost: {sf: 'T6', tf:'L6',  resource: RESOURCE_CATALYZED_GHODIUM_ACID},
+//                    boost: {sf: 'T6', tf:'L6',  resource: RESOURCE_CATALYZED_GHODIUM_ACID},
                     spawnMaps: [
 
                         {name: "baseLorry", required: true},
-//                        {name: "remoteConstruction", room: 'W49N56', copy: 2},
-                        {name: "upgrader", copy: 2},
+//                        {name: "labworker", required: true, copy: 2},
+
+//                        {name: "remoteConstruction", room: 'W48N55', copy: 1},
+                        {name: "roadworker", room: 'W48N52', copy: 2},
+//                        {name: "upgrader", copy: 2},
 //                        {name: "roadworker", copy: 3 },
 //                        {name: "roadworker", copy: 4},
                         {name: "custom",
                           creeps:{
+
+//                            'A1x': {role: "attacker", sf: 'A9', bodyparts: mainHelper.getMixedBodyGood(21,[ATTACK,MOVE],3,[HEAL,MOVE],1,[MOVE]), ar: 40, },
+/*
+                            'A2x': {role: "attacker", sf: 'A9', bodyparts: mainHelper.getMixedBodyGood(21,[ATTACK,MOVE],3,[HEAL,MOVE],1,[MOVE]), ar: 40, },
+                            'A3x': {role: "attacker", sf: 'A9', bodyparts: mainHelper.getMixedBodyGood(15,[ATTACK,MOVE],2,[RANGED_ATTACK],3,[HEAL],4,[MOVE] ), ar: 40, },
+                            'A4x': {role: "attacker", sf: 'A9', bodyparts: mainHelper.getMixedBodyGood(15,[ATTACK,MOVE],2,[RANGED_ATTACK],3,[HEAL],4,[MOVE] ), ar: 40, },
+                            'He312': {role: 'healer', sf: 'A3' , bodyparts: mainHelper.getMixedBodyGood(25,[HEAL,MOVE]), follow: 'A2x'},
+                            'He311': {role: 'healer', sf: 'A3' , bodyparts: mainHelper.getMixedBodyGood(25,[HEAL,MOVE])},
+*/
 
 //                            'Co11': {role: 'collector', bodyparts: mainHelper.getBody(20,CARRY,20,MOVE), room: 'W49N56'},
 //                            'Co12': {role: 'collector', bodyparts: mainHelper.getBody(20,CARRY,20,MOVE), room: 'W49N56'},
@@ -326,11 +413,13 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
 
                         }},
 
+//                        {name: "remoteConstruction", room: 'W48N52', copy: 3},
+//                        {name: "remoteConstruction", room: 'W53N59', copy: 4, via: 'V2'},
                         {name: "remoteHarvest", room: 'W48N55', copy: 1},
                         {name: "remoteHarvest", room: 'W49N53', copy: 2},
                         {name: "remoteHarvest", room: 'W49N54', copy: 1},
                         {name: "remoteHarvest", room: 'W48N53', copy: 1},
-                        {name: "remoteHarvest", room: 'W47N55', copy: 2},
+//                        {name: "remoteHarvest", room: 'W47N55', copy: 2},
                         {name: "remoteHarvest", room: 'W47N53', copy: 2},
 
                         ]
@@ -343,7 +432,9 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
                     roads: false,
                     spawnMaps: [
                         {name: "baseLorry", required: true},
-                         {name: "roadworker", copy: 2},
+                         {name: "roadworker", copy: 1},
+                        {name: "remoteConstruction", room: 'W47N44', sf: 'C14', copy: 1},
+                        {name: "remoteConstruction", room: 'W43N43', sf: 'C14', copy: 1},
                         {name: "custom",
                           creeps:{
 /*
@@ -352,8 +443,8 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
 */
 //                            'A51': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getBody(24,ATTACK,25,MOVE,1,HEAL), ar: 40},
 //                            'A55': {role: "attacker", sf: 'A5', bodyparts: mainHelper.getBody(25,MOVE,24,RANGED_ATTACK,1,HEAL), ar: 40},
-                            'H56': {role: "healer", sf: 'A5', bodyparts: mainHelper.getBody(10,TOUGH,5,HEAL,15,MOVE), follow: 'A51'},
-                            'H55': {role: "healer", sf: 'A5', bodyparts: mainHelper.getBody(10,TOUGH,5,HEAL,15,MOVE), follow: 'A51'},
+//                            'H56': {role: "healer", sf: 'A5', bodyparts: mainHelper.getBody(10,TOUGH,5,HEAL,15,MOVE), follow: 'A51'},
+//                            'H55': {role: "healer", sf: 'A5', bodyparts: mainHelper.getBody(10,TOUGH,5,HEAL,15,MOVE), follow: 'A51'},
 
 //                            'H1B': {role: "healer", sf: 'A2', bodyparts: mainHelper.getBody(25,HEAL,25,MOVE), follow: 'A1B'},
 //                            'A1B': {role: "attacker", sf: 'A2', bodyparts: mainHelper.getBody(20,ATTACK,21,MOVE,1,HEAL), follower: 'H1B', ar: 40},
@@ -372,10 +463,10 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
 
 //                        {name: "upgrader", copy: 1},
 
-                        {name: "remoteHarvest", room: 'W47N46', copy: 1},
-                        {name: "remoteHarvest", room: 'W48N47', copy: 1},
+//FREE                        {name: "remoteHarvest", room: 'W47N46', copy: 1},
+//FREE                        {name: "remoteHarvest", room: 'W48N47', copy: 1},
 //                        {name: "remoteHarvest", room: 'W48N45', copy: 1},
-                        {name: "remoteHarvest", room: 'W47N45', copy: 1},
+//                        {name: "remoteHarvest", room: 'W47N45', copy: 1},
 /*
 */
 //                        {name: "remoteConstruction", room: 'W47N46', sf: 'C3', copy: 1},
@@ -388,7 +479,6 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
 /*
                         {name: "remoteConstruction", room: 'W44N43', sf: 'C12', copy: 1},
                         {name: "remoteConstruction", room: 'W44N42', sf: 'C13', copy: 1},
-                        {name: "remoteConstruction", room: 'W47N44', sf: 'C14', copy: 1},
 */
 //                        {name: "remoteConstruction", room: 'W42N43', sf: 'C3', copy: 4},
 
@@ -475,15 +565,43 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
                     roads: false,
                     spawnMaps: [
                         {name: "baseLorry", required: true},
-//                        {name: "roadworker", copy: 1},
+                        {name: "upgrader", copy: 2},
 //                        {name: "attacker",  sf: 'A5', copy: 1},
                         {name: "remoteHarvest", room: 'W51N37', copy: 1},
 //                        {name: "remoteHarvest", room: 'W52N36', copy: 1},
                         {name: "remoteHarvest", room: 'W53N37', copy: 1},
-//                        {name: "remoteConstruction", room: 'W46N33', copy: 5, via: "v1"},
+//                        {name: "remoteConstruction", room: 'W47N29', copy: 1, via: "V4"},
 //                        {name: "upgraderFast", room: 'W42N35', copy: 1, via: "v1"},
 //                        {name: "roadworkerFast", room: 'W42N35', copy: 3, via: "v1"},
 
+                        ]
+                }
+            },
+            W47N29:
+            {
+                room: {
+                    construct: true,
+                    roads: false,
+                    spawnMaps: [
+                        {name: "baseLorry", required: true},
+                        {name: "claimer", room: 'W41N24', via: 'V5', required: true},
+                        {name: "roadworker", copy: 1},
+                        {name: "roadworker", copy: 1, room: 'W48N27'},
+//                        {name: "remoteConstruction", room: 'W48N27', copy: 3},
+                        {name: "remoteConstruction", room: 'W41N24', copy: 2},
+                        {name: "remoteHarvest", room: 'W47N28', copy: 1},
+                        ]
+                }
+            },
+            W48N27:
+            {
+                room: {
+                    construct: true,
+                    roads: false,
+                    spawnMaps: [
+                        {name: "baseLorry", required: true},
+//                        {name: "claimer", room: 'W42N32', via: 'V5', required: true},
+                        {name: "roadworker", copy: 1},
                         ]
                 }
             },
@@ -531,6 +649,20 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
                         ]
                 }
             },
+            W53N59:
+            {
+                room: {
+                    construct: true,
+                    roads: false,
+                    spawnMaps: [
+                        {name: "baseLorry", required: true},
+//                        {name: "roadworker", copy: 1},
+                        {name: "upgrader", copy: 15},
+//                        {name: "remoteHarvest", room: 'W52N59', copy: 1},
+//                        {name: "remoteHarvest", room: 'W54N59', copy: 1},
+                        ]
+                }
+            },
             W37N31:
             {
                 room: {
@@ -538,6 +670,18 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
                     roads: false,
                     spawnMaps: [
                         {name: "baseLorry", required: true},
+                        {name: "roadworker", copy: 1},
+                        ]
+                }
+            },
+            W47N46:
+            {
+                room: {
+                    construct: true,
+                    roads: false,
+                    spawnMaps: [
+                        {name: "baseLorry", required: true},
+                        {name: "roadworkerSmall", copy: 5},
                         {name: "roadworker", copy: 1},
                         ]
                 }
@@ -551,7 +695,9 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
                         {name: "baseLorry", required: true},
 //                        {name: "attacker", copy: 2, room: 'W43N43', sf: 'A2', ar: 40},
                         {name: "roadworker", copy: 1},
-                        {name: "roadworker", room: 'W43N43', copy: 2},
+                        {name: "roadworker", room: 'W23N43', copy: 2},
+                        {name: "upgrader", room: 'W23N43', copy: 2},
+                        {name: "roadworkerFast", room: 'W43N43', copy: 2},
 
 //                        {name: "roadworker", copy: 2, room: "W43N43", sf: 'C1'},
                         ]
@@ -601,25 +747,35 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
                     roads: false,
                     spawnMaps: [
                         {name: "baseLorry", required: true},
-                       {name: "remoteConstruction", room: 'W45N43', copy: 1},
-                        {name: "roadworker", copy: 4},
+                        {name: "roadworker", copy: 1},
+//                        {name: "claimer", room: 'W45N43', copy: 1, required: true},
+//                        {name: "claimer", room: 'W44N43', copy: 1, required: true},
 
-//                        {name: "remoteConstruction", room: 'W44N43', copy: 1},
-//                        {name: "remoteConstruction", room: 'W45N43', copy: 1},
+                        {name: "remoteConstruction", room: 'W44N43', copy: 1},
+                        {name: "remoteConstruction", room: 'W45N43', copy: 1},
+                        {name: "remoteConstruction", room: 'W43N43', sf: 'C1', copy: 1},
+                        {name: "remoteConstruction", room: 'W42N43', sf: 'C1', copy: 1},
+
 //                        {name: "remoteConstruction", room: 'W44N42', copy: 1},
 
-//                        {name: "remoteConstruction", room: 'W42N43', sf: 'C3', copy: 4},
+//                        {name: "remoteConstruction", room: 'W42N43', copy: 4},
 
                         {name: "custom",
 
                           creeps:{
-//                        'Healer1': {role: "healer", sf: 'A5', bodyparts: mainHelper.getBody(5,TOUGH,1,HEAL,6,MOVE)},
+
+                        'Healer1': {role: "healer", sf: 'A5', bodyparts: mainHelper.getBody(5,TOUGH,2,HEAL,7,MOVE)},
+//                        'Doer1': {role: "doer", bodyparts: mainHelper.getBody(2,MOVE)},
+//                        'Doer2': {role: "doer", bodyparts: mainHelper.getBody(2,MOVE)},
+//                        'Doer3': {role: "doer", bodyparts: mainHelper.getBody(2,MOVE)},
 
   //                          'L11': {role: "lorry", bodyparts: mainHelper.getBody(2,CARRY,1,MOVE)},
                           }},
-                        {name: "remoteConstruction", room: 'W44N43', copy: 1},
-                        {name: "remoteConstruction", room: 'W43N43', sf: 'C1', copy: 1},
-                        {name: "remoteConstruction", room: 'W42N43', sf: 'C1', copy: 1},
+//                        {name: "remoteConstruction", room: 'W45N43', copy: 1},
+//                        {name: "remoteConstruction", room: 'W44N43', copy: 1},
+/*
+FREE
+*/
 /*
 */
 //                        {name: "remoteConstruction", room: 'W45N43', sf: 'C1', copy: 1},
@@ -744,11 +900,16 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
 //                                'Co4': {role: 'collector', bodyparts: mainHelper.getBody(8,CARRY,8,MOVE)},
 //                                'Co5': {role: 'collector', bodyparts: mainHelper.getBody(12,CARRY,12,MOVE)},
                              }},
-                        {name: "upgrader", copy: 2},
+//                        {name: "upgrader", copy: 1},
+                        {name: "upgraderFast", copy: 1, room: 'W49N49'},
+                        {name: "roadworkerFast", copy: 2, room: 'W49N49'},
 //                        {name: "roadworker", copy: 2},
                         {name: "remoteHarvest", room: 'W53N45', copy: 1},
                         {name: "remoteHarvest", room: 'W52N44', copy: 1},
 //                        {name: "remoteConstruction", room: 'W52N37', copy: 4},
+                        {name: "remoteConstruction", room: 'W51N51', copy: 2, via: 'V6'},
+                        {name: "remoteConstruction", room: 'W48N46', copy: 2, via: 'V2'},
+                        {name: "remoteConstruction", room: 'W48N54', copy: 2},
                         ]
                 }
             },
@@ -814,7 +975,6 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
 
 
     if (creep.memory.via){
-
         if (!creep.memory.viaVisited){
             if (creep.pos.isNearTo(Game.flags[creep.memory.via])){
                 creep.memory.viaVisited = true;
@@ -852,32 +1012,6 @@ if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRU
             creep.memory.sf = 'S6';        creep.memory.tf = 'L6';        creep.memory.resource = RESOURCE_CATALYZED_GHODIUM_ACID; /*creep.memory.resource = RESOURCE_ENERGY;*/
     }
 
-    if (creep.memory.follower){
-        var follower = Game.creeps[creep.memory.follower]
-//        if (!creep.pos.inRangeTo(master)){
-          if (creep.fatigue == 0 && (Game.time % 3 == 0) && follower &&  follower.room.name == creep.room.name && !creep.pos.inRangeTo(follower,2)){
-            creep.moveTo(follower)
-            continue
-        }
-
-    }
-    if (creep.memory.healedBy){
-        creep.moveTo(Game.getObjectById(creep.memory.healedBy))
-        creep.memory.healedBy = undefined;
-        continue
-    }
-    if (creep.memory.follow){
-        var master = Game.creeps[creep.memory.follow]
-        if (master && /*master.room.name == creep.room.name && */ !creep.pos.inRangeTo(master,1)){
-            if ((creep.hits < (creep.hitsMax*0.4)) || ((creep.hits < creep.hitsMax) && (Game.time % 4 <= 2) && creep.getActiveBodyparts(HEAL) >=1 )) {
-                    creep.heal(creep)
-                } else  {
-                    creep.moveTo(master)
-                }
-//            creep.moveByPath(master.memory._move)
-            continue
-        }
-    }
 
     if (Memory.spawnMap[creep.memory.spawnRoomName] && Memory.spawnMap[creep.memory.spawnRoomName].generatedMap ){
         var mapEntry = Memory.spawnMap[creep.memory.spawnRoomName].generatedMap[creep.name];
@@ -1024,10 +1158,11 @@ if (creep.name=='He5141'){creep.memory.role='healer'}
 //creep.moveTo(5,36 )
                 if (creep.room.name == "W41N35" && creep.pos.x < 23) {creep.moveTo(24,22)}
                 if (creep.room.name == "W45N43" && creep.pos.x < 1) {creep.move(BOTTOM_RIGHT)}
-                if (creep.room.name == "W45N43" && creep.pos.x < 20) {creep.moveTo(48,16)}
-                if (creep.room.name == "W46N44" ) {creep.moveTo(12,49)}
-                if (creep.room.name == "W46N43" ) {creep.moveTo(49,35)}
-                if (creep.room.name == "W50N39" ) {creep.moveTo(14,49)}
+                if (creep.room.name == "W45N43" && creep.pos.x < 4) {creep.moveTo(48,16)}
+                if (creep.room.name == "W46N44" && creep.pos.x < 17 && creep.pos.x > 7) {creep.moveTo(12,49)}
+                if (creep.room.name == "W47N47" ) { creep.moveTo(26,49)}
+//                if (creep.room.name == "W46N43" && creep.pos.x > 3) {creep.moveTo(49,35)}
+
                 if (creep.room.name == "W41N50" ) {creep.moveTo(49,39)}
                 if (creep.room.name == "W44N43" && ( creep.memory.room == "W41N41" || creep.memory.room == "W42N41" || creep.memory.room == "W42N43") ) {creep.moveTo(14,49)}
                 if (creep.room.name == "W41N35" && creep.memory.room != "W41N35" && creep.pos.x > 19) {creep.moveTo(19,16)}
@@ -1041,12 +1176,16 @@ if (creep.name=='He5141'){creep.memory.role='healer'}
 
 //creep.moveTo(1,1)
 //Game.creeps['Harvester7841134'].moveTo(20,12)
+if (creep.room.name == "W48N49" && creep.memory.room != "W48N49"  && creep.memory.room != "W49N49"){
+    creep.moveTo(43,49)
+}
 
         if (creep.name == 'R412' || creep.name == 'R411'){
 // creep.moveTo(1,1)
  //            dismantle(creep)
         }
-
+//if (creep.room.name == "W47N44"){creep.moveTo(17,0); }
+//if (creep.room.name == "W47N45"){creep.moveTo(17,4); }
     }
 
 

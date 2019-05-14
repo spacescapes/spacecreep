@@ -38,6 +38,48 @@ module.exports = {
 
         return (body)
     },
+    getMixedBody: function (t1,b1,b2,b3,b4,b5){
+        var body = []
+        for (i = 1;i<=t1;i++){
+            body.push(b1)
+            if (b2) body.push(b2)
+            if (b3) body.push(b3)
+            if (b4) body.push(b4)
+            if (b5) body.push(b5)
+        }
+        return (body)
+    },
+
+    getMixedBodyGood: function (t1,a1,t2,a2,t3,a3,t4,a4){
+        var body = []
+        for (i = 1;i<=t1;i++){
+            for (var part of a1){
+                body.push(part)
+            }
+        }
+        if (t2){
+            for (i = 1;i<=t2;i++){
+                for (var part of a2){
+                    body.push(part)
+                }
+            }
+        }
+        if (t3){
+            for (i = 1;i<=t3;i++){
+                for (var part of a3){
+                    body.push(part)
+                }
+            }
+        }
+        if (t4){
+            for (i = 1;i<=t4;i++){
+                for (var part of a4){
+                    body.push(part)
+                }
+            }
+        }
+        return (body)
+    },
 
     recycleCreep: function (creep){
         var target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
@@ -90,9 +132,9 @@ module.exports = {
 
             if (!resource){
                 resource = _.max( Object.keys(Game.rooms[roomName].terminal.store), (r) => (Game.rooms[roomName].terminal.store[r]))
-                console.log(resource + " " + roomName)
-                console.log(JSON.stringify(Game.rooms[roomName].terminal.store))
-                minimum = 200000
+//                console.log(resource + " " + roomName)
+//                console.log(JSON.stringify(Game.rooms[roomName].terminal.store))
+                minimum = 150000
             }
 
 
@@ -118,6 +160,89 @@ module.exports = {
 
 
     },
+    buildSetup: function (){
+        if (Game.rooms["W48N52"]) Game.rooms["W48N52"].createConstructionSite(20,38,STRUCTURE_RAMPART)
+        if (Game.rooms["W48N52"]) Game.rooms["W48N52"].createConstructionSite(20,38,STRUCTURE_SPAWN)
+        if (Game.rooms["W48N52"]) Game.rooms["W48N52"].createConstructionSite(43,44,STRUCTURE_RAMPART)
+
+        if (Game.rooms["W48N51"]) Game.rooms["W48N51"].createConstructionSite(26,34,STRUCTURE_RAMPART)
+        if (Game.rooms["W48N51"]) Game.rooms["W48N51"].createConstructionSite(26,34,STRUCTURE_SPAWN)
+        if (Game.rooms["W48N51"]) Game.rooms["W48N51"].createConstructionSite(37,33,STRUCTURE_RAMPART)
+
+        if (Game.rooms["W51N51"]) Game.rooms["W51N51"].createConstructionSite(35,29,STRUCTURE_RAMPART)
+        if (Game.rooms["W51N51"]) Game.rooms["W51N51"].createConstructionSite(35,29,STRUCTURE_SPAWN)
+
+
+        if (Game.rooms["W37N48"]) Game.rooms["W37N48"].createConstructionSite(23,13,STRUCTURE_SPAWN)
+        if (Game.rooms["W39N49"]) Game.rooms["W39N49"].createConstructionSite(31,33,STRUCTURE_SPAWN)
+        if (Game.rooms["W39N49"]) Game.rooms["W39N49"].createConstructionSite(31,33,STRUCTURE_RAMPART)
+        if (Game.rooms["W42N43"]) Game.rooms["W42N43"].createConstructionSite(11,34,STRUCTURE_WALL)
+        if (Game.rooms["W42N43"]) Game.rooms["W42N43"].createConstructionSite(11,35,STRUCTURE_WALL)
+        if (Game.rooms["W42N43"]) Game.rooms["W42N43"].createConstructionSite(11,36,STRUCTURE_WALL)
+        if (Game.rooms["W42N43"]) Game.rooms["W42N43"].createConstructionSite(10,36,STRUCTURE_WALL)
+        if (Game.rooms["W42N43"]) Game.rooms["W42N43"].createConstructionSite(9,36,STRUCTURE_WALL)
+        if (Game.rooms["W43N43"]) Game.rooms["W43N43"].createConstructionSite(6,38,STRUCTURE_WALL)
+        if (Game.rooms["W43N43"]) Game.rooms["W43N43"].createConstructionSite(6,39,STRUCTURE_WALL)
+        if (Game.rooms["W44N43"]) Game.rooms["W44N43"].createConstructionSite(16,23,STRUCTURE_SPAWN)
+        if (Game.rooms["W44N43"]) Game.rooms["W44N43"].createConstructionSite(16,23,STRUCTURE_RAMPART)
+        if (Game.rooms["W46N33"]) Game.rooms["W46N33"].createConstructionSite(10,17,STRUCTURE_SPAWN)
+        if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRUCTURE_SPAWN)
+        if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(36,41,STRUCTURE_RAMPART)
+        if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(32,38,STRUCTURE_WALL)
+        if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(32,39,STRUCTURE_WALL)
+        if (Game.rooms["W45N43"]) Game.rooms["W45N43"].createConstructionSite(31,39,STRUCTURE_WALL)
+        if (Game.rooms["W48N46"]) Game.rooms["W48N46"].createConstructionSite(21,47,STRUCTURE_WALL)
+        if (Game.rooms["W48N46"]) Game.rooms["W48N46"].createConstructionSite(46,9,STRUCTURE_WALL)
+        if (Game.rooms["W48N46"]) Game.rooms["W48N46"].createConstructionSite(37,35,STRUCTURE_SPAWN)
+        if (Game.rooms["W48N46"]) Game.rooms["W48N46"].createConstructionSite(37,35,STRUCTURE_RAMPART)
+        if (Game.rooms["W48N46"]) Game.rooms["W48N46"].createConstructionSite(39,32,STRUCTURE_SPAWN)
+        if (Game.rooms["W48N46"]) Game.rooms["W48N46"].createConstructionSite(39,32,STRUCTURE_RAMPART)
+        if (Game.rooms["W48N46"]) Game.rooms["W48N46"].createConstructionSite(35,33,STRUCTURE_SPAWN)
+        if (Game.rooms["W48N46"]) Game.rooms["W48N46"].createConstructionSite(35,33,STRUCTURE_RAMPART)
+
+        if (Game.rooms["W48N46"]) Game.rooms["W48N46"].createConstructionSite(40,3,STRUCTURE_RAMPART)
+        if (Game.rooms["W48N46"]) Game.rooms["W48N46"].createConstructionSite(41,3,STRUCTURE_RAMPART)
+        if (Game.rooms["W48N46"]) Game.rooms["W48N46"].createConstructionSite(42,3,STRUCTURE_RAMPART)
+        if (Game.rooms["W48N46"]) Game.rooms["W48N46"].createConstructionSite(22,47,STRUCTURE_RAMPART)
+
+
+        if (Game.rooms["W47N46"]) Game.rooms["W47N46"].createConstructionSite(44,41,STRUCTURE_RAMPART)
+        if (Game.rooms["W47N46"]) Game.rooms["W47N46"].createConstructionSite(44,41,STRUCTURE_SPAWN)
+        if (Game.rooms["W47N46"]) Game.rooms["W47N46"].createConstructionSite(12,47,STRUCTURE_RAMPART)
+        if (Game.rooms["W47N46"]) Game.rooms["W47N46"].createConstructionSite(13,47,STRUCTURE_WALL)
+        if (Game.rooms["W47N46"]) Game.rooms["W47N46"].createConstructionSite(14,47,STRUCTURE_WALL)
+        if (Game.rooms["W47N46"]) Game.rooms["W47N46"].createConstructionSite(15,47,STRUCTURE_WALL)
+        if (Game.rooms["W47N46"]) Game.rooms["W47N46"].createConstructionSite(16,47,STRUCTURE_WALL)
+        if (Game.rooms["W47N46"]) Game.rooms["W47N46"].createConstructionSite(17,47,STRUCTURE_WALL)
+        if (Game.rooms["W47N46"]) Game.rooms["W47N46"].createConstructionSite(18,47,STRUCTURE_WALL)
+        if (Game.rooms["W47N46"]) Game.rooms["W47N46"].createConstructionSite(19,47,STRUCTURE_WALL)
+        if (Game.rooms["W47N46"]) Game.rooms["W47N46"].createConstructionSite(20,47,STRUCTURE_WALL)
+        if (Game.rooms["W47N46"]) Game.rooms["W47N46"].createConstructionSite(21,47,STRUCTURE_WALL)
+        if (Game.rooms["W47N46"]) Game.rooms["W47N46"].createConstructionSite(23,47,STRUCTURE_WALL)
+        if (Game.rooms["W47N46"]) Game.rooms["W47N46"].createConstructionSite(23,48,STRUCTURE_WALL)
+
+        if (Game.rooms["W47N29"]) Game.rooms["W47N29"].createConstructionSite(4,37,STRUCTURE_WALL)
+        if (Game.rooms["W47N29"]) Game.rooms["W47N29"].createConstructionSite(5,37,STRUCTURE_WALL)
+
+        if (Game.rooms["W48N54"]) Game.rooms["W48N54"].createConstructionSite(13,19,STRUCTURE_RAMPART)
+        if (Game.rooms["W48N54"]) Game.rooms["W48N54"].createConstructionSite(13,19,STRUCTURE_SPAWN)
+
+        if (Game.rooms["W47N44"]) Game.rooms["W47N44"].createConstructionSite(23,41,STRUCTURE_RAMPART)
+        if (Game.rooms["W47N44"]) Game.rooms["W47N44"].createConstructionSite(23,41,STRUCTURE_SPAWN)
+        if (Game.rooms["W47N44"]) Game.rooms["W47N44"].createConstructionSite(45,35,STRUCTURE_RAMPART)
+        if (Game.rooms["W47N44"]) Game.rooms["W47N44"].createConstructionSite(45,34,STRUCTURE_RAMPART)
+        if (Game.rooms["W47N44"]) Game.rooms["W47N44"].createConstructionSite(16,2,STRUCTURE_RAMPART)
+        if (Game.rooms["W47N44"]) Game.rooms["W47N44"].createConstructionSite(17,2,STRUCTURE_RAMPART)
+
+        if (Game.rooms["W49N49"]) Game.rooms["W49N49"].createConstructionSite(46,18,STRUCTURE_RAMPART)
+        if (Game.rooms["W49N49"]) Game.rooms["W49N49"].createConstructionSite(29,27,STRUCTURE_RAMPART)
+        if (Game.rooms["W49N49"]) Game.rooms["W49N49"].createConstructionSite(29,27,STRUCTURE_SPAWN)
+        if (Game.rooms["W49N49"]) Game.rooms["W49N49"].createConstructionSite(23,18,STRUCTURE_RAMPART)
+        if (Game.rooms["W49N49"]) Game.rooms["W49N49"].createConstructionSite(23,18,STRUCTURE_SPAWN)
+        if (Game.rooms["W49N49"]) Game.rooms["W49N49"].createConstructionSite(22,35,STRUCTURE_RAMPART)
+        if (Game.rooms["W49N49"]) Game.rooms["W49N49"].createConstructionSite(22,35,STRUCTURE_SPAWN)
+        },
+
     marketTrade: function (){
         this.doDeal(1, undefined,  1500, 'W49N49', 90000)
         this.doDeal(2, undefined,  1500, 'W48N51', 90000)
@@ -128,7 +253,7 @@ module.exports = {
         this.doDeal(6, undefined,  1500, 'W43N43', 90)
 //        this.doDeal(6, RESOURCE_ENERGY,  1500, 'W43N43', 90000)
         this.doDeal(7, undefined,  1500, 'W42N43', 90000)
-        this.doDeal(8, undefined,  1500, 'W48N46', 90000)
+//        this.doDeal(8, undefined,  1500, 'W48N46', 90000)
 //        this.doDeal(9, undefined,  1500, 'W39N49', 90000)
 //        this.doDeal(10, undefined, 1500, 'W37N48', 90000)
         this.doDeal(11, undefined,  1500, 'W42N35', 90000)

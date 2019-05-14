@@ -2,6 +2,7 @@ var roleUpgraderRemote = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
+
 //        creep.suicide()
 //if (creep.name == 'UR16') creep.memory.tf = 'B1'
 //if (creep.name == 'UR17') creep.memory.sf = 'B1'

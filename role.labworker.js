@@ -4,24 +4,105 @@ var o = Object.create(meta);
 
 o.run = function(creep) {
 //creep.drop(RESOURCE_ENERGY)
-    var source
-    if (!creep.memory.resource) {
-        creep.memory.resource = RESOURCE_ENERGY
-    }
 
+    creep.say("labworker")
+
+/*
+creep.moveTo(Game.getObjectById("5c1a3ed7669b44092ad44520"))
+creep.withdraw(Game.getObjectById("5c1a3ed7669b44092ad44520"), RESOURCE_LEMERGIUM)
+
+
+creep.moveTo(Game.getObjectById("5c03f60113c57d567e82016a"))
+creep.say(creep.transfer(Game.getObjectById("5c03f60113c57d567e82016a"), RESOURCE_LEMERGIUM))
+return(0)
+*/
+
+    var labs = creep.room.find(FIND_STRUCTURES, {
+        filter: (i) => i.structureType == STRUCTURE_LAB
+    })
 
 //console.log(creep.name+" "+creep.room.name+" " + Game.rooms[creep.memory.spawnRoomName].storage)
-    if (creep.memory.sf){
-        source = Game.flags[creep.memory.sf]
+    if (_.sum(creep.carry) == 0){
+        var source = creep.room.terminal
+        if (!creep.pos.isNearTo(source)){
+            creep.moveTo(source)
+            return(0)
+        }
+
+
+        var chosenLab = labs.find((lab) => ( lab.energy < 1500  ) )
+        if (chosenLab ){
+            creep.say("ch energy " + source.store[RESOURCE_ENERGY])
+            creep.withdraw(source, RESOURCE_ENERGY);
+            return(0)
+        }
+
+
+        for (var resource in source.store){
+
+
+            if (resource != RESOURCE_ENERGY){
+                creep.say(resource+ " " + source.store[resource])
+                var chosenLab = labs.find((lab) => ( lab.mineralType == resource  ) )
+                if (!chosenLab){
+                    chosenLab = labs.find((lab) => (!lab.mineralType)  )
+                }
+                if (chosenLab && chosenLab.mineralAmount < 1500){
+                    creep.say("ch " + resource+ " " + source.store[resource])
+                    creep.withdraw(source, resource);
+                }
+
+            }
+        }
+
     } else {
-        source = Game.rooms[creep.memory.spawnRoomName].storage
-        if (!source || source.store[creep.memory.resource] == 0){
-            var sources = Game.rooms[creep.memory.spawnRoomName].find(FIND_STRUCTURES, {filter: function(s){return((s.structureType==STRUCTURE_CONTAINER || s.structureType==STRUCTURE_TERMINAL) && s.store[creep.memory.resource] > 0)}})
-            if (sources.length > 0) {
-                source = sources[0]
-            } else {
-//                creep.say("no pickup")
-//                return(1)
+
+        if (creep.carry.energy > 0){
+            var chosenLab = labs.find((lab) => ( lab.energy < 1500 ) )
+            if (chosenLab ){
+
+    creep.say(creep.pos.isNearTo(chosenLab));
+
+
+                if (!creep.pos.isNearTo(chosenLab)){
+                    creep.moveTo(chosenLab)
+                    return(0)
+                }
+                creep.say("ch > energy " + chosenLab.id + " "  +creep.carry[RESOURCE_ENERGY])
+
+                creep.transfer(chosenLab, RESOURCE_ENERGY)
+
+
+                return(0)
+
+            }
+        }
+
+        for (var resource in creep.carry){
+
+
+            if (resource != RESOURCE_ENERGY){
+                creep.say(resource+ " " + creep.carry[resource])
+                var chosenLab = labs.find((lab) => ( lab.mineralType == resource  ) )
+                if (!chosenLab){
+                    chosenLab = labs.find((lab) => (!lab.mineralType)  )
+                }
+
+                if (chosenLab && chosenLab.mineralAmount < 2000){
+
+
+                    if (!creep.pos.isNearTo(chosenLab)){
+                        creep.moveTo(chosenLab)
+                        return(0)
+                    }
+                    creep.say("ch " + resource+ + " " + chosenLab.id + " "  +creep.carry[resource])
+
+                    creep.transfer(chosenLab, resource);
+
+
+
+                }
+
             }
         }
     }
@@ -52,34 +133,7 @@ o.run = function(creep) {
 //    creep.memory.sf = 'container2';        creep.memory.tf = 'S2';        creep.memory.resource = RESOURCE_ENERGY
 //    creep.memory.sf = 'container1';        creep.memory.tf = 'S1';        creep.memory.resource = RESOURCE_ENERGY
 
-    if (creep.name == 'XE-baseLorry-1-W48N54') {
-        creep.memory.role = 'labworker'
-            creep.memory.sf = 'S6';        creep.memory.tf = 'L6';       /* creep.memory.resource = RESOURCE_CATALYZED_GHODIUM_ACID; */ creep.memory.resource = RESOURCE_ENERGY;
-    }
-
-
-    if (creep.carry[creep.memory.resource] ){
-        this.moveAndTransfer(creep, Game.flags[creep.memory.tf], creep.memory.resource)
-        creep.memory.onceLoaded = true
-    } else {
-        if (creep.memory.recycleAfterDelivery && creep.memory.onceLoaded == true){
-            var spawn = creep.pos.findClosestByRange(FIND_STRUCTURES, {filter: (structure) => structure.structureType == STRUCTURE_SPAWN})
-            if (spawn){
-                if (creep.pos.inRangeTo(spawn,1)){
-                    spawn.recycleCreep(creep)
-                } else {
-                     creep.moveTo(spawn)
-                }
-            } else {
-
-                this.moveAndWithdraw(creep, source, creep.memory.resource)
-            }
-        } else {
-
-            this.moveAndWithdraw(creep, source, creep.memory.resource)
-        }
-    }
-
+creep.drop(RESOURCE_ENERGY)
 }
 
 

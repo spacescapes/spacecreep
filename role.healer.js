@@ -1,8 +1,18 @@
-var roleHealer = {
+var meta = require("role.meta")
 
+var o = Object.create(meta);
 
-    run: function(creep) {
+o.run = function(creep) {
 
+    if (this.boost(creep)){
+        creep.say("boost" + this.boost(creep))
+        return(0)
+    }
+
+    if (this.follow(creep)){
+        creep.say("follow" + this.boost(creep))
+        return(0)
+    }
 
         var maxDistance = 40
         let viaFlags = Object.keys(Game.flags).filter((f) => f.startsWith('via')).sort()
@@ -112,7 +122,7 @@ if (creep.room.name == "W41N40") {
 //                    return(0)
                 } else if (creep.hits < creep.hitsMax){
                     creep.heal(creep)
-                    targetFlag = safeFlag
+//                    targetFlag = safeFlag
                 }
 
             }
@@ -128,7 +138,12 @@ if (creep.room.name == "W41N40") {
             enemy.memory.healedBy = creep.id
         }
         if (creep.memory.follow){
-            enemy = Game.creeps[creep.memory.follow]
+            if (!enemy || (Game.creeps[creep.memory.follow] && (enemy && Game.creeps[creep.memory.follow].hits < Game.creeps[creep.memory.follow].hitsMax ))) {
+                enemy = Game.creeps[creep.memory.follow]
+            }
+
+            if (enemy && !enemy.memory.followedBy) enemy.memory.followedBy = {}
+            if (enemy) enemy.memory.followedBy[creep.name] = true
         }
 
         if (enemy){
@@ -136,6 +151,7 @@ if (creep.room.name == "W41N40") {
                 creep.moveTo(enemy, {visualizePathStyle: {stroke: '#00ffff'}});
             }
         } else {
+            creep.say("HHH")
             if(!creep.pos.inRangeTo(targetFlag,4)) creep.moveTo(targetFlag, {visualizePathStyle: {stroke: '#00ffff'}})
         }
         if(!creep.pos.inRangeTo(targetFlag,maxDistance)) creep.moveTo(targetFlag, {visualizePathStyle: {stroke: '#00ffff'}})
@@ -147,6 +163,6 @@ if (creep.room.name == "W41N40") {
         }
 
 }
-};
 
-module.exports = roleHealer; 
+
+module.exports = o;

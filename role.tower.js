@@ -12,7 +12,7 @@ var roleTower = {
 
      }
 //            tower.room.memory.repair=true
-        var targets = tower.room.find(FIND_HOSTILE_CREEPS,{filter: function(creep){return ( creep.id != "5cbf2c8fbf3b95367634a732" && !(creep.owner.username == '') && !(creep.owner.username == 'iceburg') && !(creep.owner.username == 'kraiik') && !creep.name.startsWith('siege')  && !creep.name.startsWith('zergling') )} });
+        var targets = tower.room.find(FIND_HOSTILE_CREEPS,{filter: function(creep){return ( creep.id != "x5cda863e73b1b62894cea534" && !(creep.owner.username == '') && !(creep.owner.username == 'iceburg') && !(creep.owner.username == 'kraiik') && !creep.name.startsWith('siege')  && !creep.name.startsWith('zergling') )} });
 //         targets = tower.room.find(FIND_STRUCTURES,{filter: function(creep){return creep.id == '5bd8939bd059f7206dd54772'} });
         if(true && targets.length > 0) {
             var attackResult = tower.attack(targets[0]);
@@ -21,7 +21,7 @@ var roleTower = {
         } else if(tower.room.memory.repair && tower.energy > 700 ){
     		var repairSite = tower.pos.findClosestByRange(FIND_STRUCTURES, {
     		filter: function(object){
-    			return ((object.structureType === STRUCTURE_ROAD || object.structureType == STRUCTURE_TOWER ) && (object.hits < (object.hitsMax-1000)) || ((object.structureType === STRUCTURE_CONTAINER) && (object.hits < (object.hitsMax-10000))) || ( object.structureType == STRUCTURE_RAMPART) && (object.hits < (1100000))  || ( object.structureType == STRUCTURE_WALL) && (object.hits < (1000000)));
+    			return ((object.structureType === STRUCTURE_ROAD || object.structureType == STRUCTURE_TOWER ) && (object.hits < (object.hitsMax-1000)) || ((object.structureType === STRUCTURE_CONTAINER) && (object.hits < (object.hitsMax-10000))) || ( object.structureType == STRUCTURE_RAMPART) && (object.hits < (110000))  || ( object.structureType == STRUCTURE_WALL) && (object.hits < (1000000)));
     		   }
     		})
 /*

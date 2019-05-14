@@ -2,8 +2,8 @@ var roleRoadworker = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
-
  if ((creep.hits < creep.hitsMax-1000) && Game.rooms[creep.memory.spawnRoomName]) {
+
      creep.say("flee")
     creep.moveTo(Game.rooms[creep.memory.spawnRoomName].controller)
     return (0)
@@ -51,20 +51,30 @@ var roleRoadworker = {
 
 		var site = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
 		filter: function(object){
-            return (true)
+//            return (true)
 //          return (false)
-//			return ( ( object.structureType == STRUCTURE_RAMPART ||  object.structureType == STRUCTURE_WALL ) );
+			return ( ( object.structureType == STRUCTURE_RAMPART ||  object.structureType == STRUCTURE_WALL ) );
 //			return ( (object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_SPAWN) );
 		   }
 		})
 
+		if (!site){
+    		site = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
+    		filter: function(object){
+                return (true)
+    //          return (false)
+    //			return ( ( object.structureType == STRUCTURE_RAMPART ||  object.structureType == STRUCTURE_WALL ) );
+    //			return ( (object.structureType == STRUCTURE_TOWER || object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART || object.structureType == STRUCTURE_SPAWN) );
+    		   }
+    		})
+		}
 		var baseRepairSite = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
 		filter: function(object){
 			return  ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART) && (object.hits < (10000-creep.pos.getRangeTo(object)*150)));
 		   }
 		});
 
-		if (( creep.room.name == "W48N46" || creep.room.name == "W47N44" || creep.room.name == "W43N43" || creep.room.name == "W44N43" || creep.room.name == "W45N43" || creep.room.name == "W42N43" || creep.room.name == "W48N46" ) && !repairSite){
+		if (( creep.room.name == "W48N46" || creep.room.name == "W47N44" || creep.room.name == "W49N49" || creep.room.name == "W43N43" || creep.room.name == "W51N51" || creep.room.name == "W47N46" || creep.room.name == "W45N43" || creep.room.name == "W48N54" || creep.room.name == "W48N46" ) && !repairSite){
         		var repairSites = creep.room.find(FIND_STRUCTURES, {
         		filter: function(object){
         			return  ((object.structureType == STRUCTURE_WALL || ( object.structureType == STRUCTURE_RAMPART && object.my )) );
@@ -109,7 +119,13 @@ var roleRoadworker = {
     		   }
     		});
 		}
-
+		if (!repairSite){
+    		var repairSite = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+    		filter: function(object){
+    			return  ((object.structureType == STRUCTURE_WALL || object.structureType == STRUCTURE_RAMPART) );
+    		   }
+    		});
+		}
 
 
 
@@ -139,6 +155,18 @@ var roleRoadworker = {
 
 
 		if (creep.memory.state == 'Load'){
+
+
+                var energies = creep.room.find(FIND_DROPPED_RESOURCES, {filter: function(object){return object.room.name == creep.room.name && object.resourceType==RESOURCE_ENERGY && object.amount >= 50}});
+                var energy = energies.reduce((maxEnergy, nextEnergy) => (maxEnergy && maxEnergy.amount > nextEnergy.amount)?maxEnergy:nextEnergy, undefined)
+//                energy = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES);
+//    energy = undefined
+    //            var energy = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {filter: function(object){return object.room.name == creep.room.name && object.resourceType==RESOURCE_ENERGY && object.amount >= 50}});
+                if (energy && energy.pos.getRangeTo(creep.pos) < 5){
+                    if (creep.pickup(energy) == ERR_NOT_IN_RANGE) creep.moveTo(energy,  {visualizePathStyle: {stroke: '#00ffff'}})
+                    return(0)
+                }
+
     		var containerFull = creep.pos.findClosestByPath(FIND_HOSTILE_STRUCTURES, {
     		filter: function(object){
     			return (object.structureType == STRUCTURE_EXTENSION && object.energy > 0 );
@@ -186,10 +214,12 @@ var roleRoadworker = {
 		}
 		else if (creep.memory.state == 'Build'){
 
+
         if (site)
 
-                if (creep.build(site) == ERR_NOT_IN_RANGE)
+                if (creep.build(site) == ERR_NOT_IN_RANGE){
                     creep.moveTo(site, {visualizePathStyle: {stroke: '#00ffff'}})
+                }
 
 		}
 		else if (creep.memory.state == 'Repair'){

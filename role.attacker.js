@@ -1,8 +1,34 @@
+var meta = require("role.meta")
 
-var roleAttacker = {
+var o = Object.create(meta);
 
-    /** @param {Creep} creep **/
-    run: function(creep) {
+o.run = function(creep) {
+
+    if (this.boost(creep)){
+        creep.say("boost" + this.boost(creep))
+        return(0)
+    }
+
+    if (this.follow(creep)){
+        creep.say("follow" + this.boost(creep))
+        return(0)
+    }
+
+
+    if (creep.memory.healOthers){
+        var enemy = creep.pos.findClosestByPath(FIND_MY_CREEPS, {
+    		filter: function(object){
+    			return (object.hits < object.hitsMax);
+    		   }
+		})
+        if (enemy){
+            creep.moveTo(enemy)
+            creep.heal(enemy)
+            return(0)
+        }
+
+
+    }
 
 //creep.moveTo(Game.flags.A1)
 /*
@@ -48,6 +74,28 @@ if (creep.room.name == "W41N40") {
         }
 
     }
+
+      if (creep.memory.followedBy){
+        var followers = Object.keys(creep.memory.followedBy)
+        if (followers.length ){
+            var follower = Game.creeps[followers[0]]
+        }
+        follower = creep.pos.findClosestByRange(FIND_MY_CREEPS, {
+            filter: function(object) {
+            return object.memory.follow==creep.name;
+        }
+        });
+
+//        if (!creep.pos.inRangeTo(master)){
+          if (follower && !creep.pos.inRangeTo(follower,1) && creep.pos.x > 1 && creep.pos.y > 1 && creep.pos.x < 48 && creep.pos.y < 48){
+            creep.moveTo(follower)
+
+            creep.say(follower.name)
+
+        }
+        creep.memory.followedBy = undefined
+
+    }
     var ar = 10
     if (creep.memory.ar) {ar = creep.memory.ar}
     var targetFlag
@@ -67,85 +115,26 @@ if (creep.room.name == "W41N40") {
             }
         }
 
-        if ((creep.hits < (creep.hitsMax*0.4)) || ((creep.hits < creep.hitsMax) && (Game.time % 2 == 1) )) {
+
+        if ((creep.hits < (creep.hitsMax*0.2)) ) {
             if (creep.getActiveBodyparts(HEAL) >=1 ) {
                 creep.heal(creep)
-            } else {
-                creep.moveTo(Game.rooms[creep.memory.spawnRoomName])
             }
+            creep.moveTo(Game.rooms[creep.memory.spawnRoomName])
             return(0)
         }
 
 //creep.suicide()
-        let viaFlags = Object.keys(Game.flags).filter((f) => f.startsWith('via')).sort()
-
-        if (!creep.memory.viaPassed) creep.memory.viaPassed = {}
-
-        if (creep.memory.fromVia) {
-            for (viaFlagIndex in viaFlags){
-                let viaFlagname = viaFlags[viaFlagIndex]
-                if (viaFlagname == creep.memory.fromVia) break
-                creep.memory.viaPassed[viaFlagname] = true
-            }
-        }
-
-        for (viaFlagIndex in viaFlags){
-                let viaFlagname = viaFlags[viaFlagIndex]
-                let viaFlag = Game.flags[viaFlagname]
-//                console.log(JSON.stringify(viaFlagname)+ " " + creep.pos.getRangeTo(viaFlag) + " " + creep.pos.getRangeTo(targetFlag) + " " + creep.memory.viaPassed[viaFlagname])
-                if (!creep.memory.viaPassed[viaFlagname]){
-//                    console.log("not yet passed " + viaFlagname)
-                    if (viaFlag.room && viaFlag.room.name == creep.room.name) {
-                        if (creep.room.controller && creep.room.controller.owner && creep.room.controller.owner.username == 'helmut'){
-                            if (creep.ticksToLive < 1230){
-                                var spawn = creep.pos.findClosestByRange(FIND_STRUCTURES, {filter: (structure) => structure.structureType == STRUCTURE_SPAWN})
-                                if (creep.pos.inRangeTo(spawn, 1)){
-                                    creep.moveTo(1,1)
-                                    return (0)
-                                } else {
-                                    creep.moveTo(spawn)
-                                    return (0)
-                                }
-                            } else {
-                                if (creep.pos.inRangeTo(viaFlag, 1)){
-                                    creep.memory.viaPassed[viaFlagname] = true
-//                                    console.log(creep.name + " via " + viaFlagname + " passed!")
-                                } else {
-                                    creep.moveTo(viaFlag, {visualizePathStyle: {stroke: '#00ffff'}, reusePath: 20})
-                                    return (0)
-                                }
-                            }
-                        } else {
-                            if (creep.pos.inRangeTo(viaFlag, 1)){
-                                creep.memory.viaPassed[viaFlagname] = true
-//                                console.log(creep.name + " via " + viaFlagname + " passed!")
-                            } else {
-                                creep.moveTo(viaFlag, {visualizePathStyle: {stroke: '#00ffff'}, reusePath: 20})
-                                return (0)
-                            }
-                        }
-                    } else {
-                        if (creep.pos.inRangeTo(viaFlag, 1)){
-                            creep.memory.viaPassed[viaFlagname] = true
-//                                console.log(creep.name + " via " + viaFlagname + " passed!")
-                        } else {
-                            creep.moveTo(viaFlag, {visualizePathStyle: {stroke: '#00ffff'}, reusePath: 20})
-                            return (0)
-                        }
-                    }
-                }
-        }
-
         if ((creep.hits == creep.hitsMax)) { creep.memory.flee = undefined }
 
         var safeFlag
         if (creep.memory.sf && Game.flags[creep.memory.sf+"Safe"] && !creep.pos.inRangeTo(Game.flags[creep.memory.sf+"Safe"],1))
-
             {safeFlag = Game.flags[creep.memory.sf+"Safe"]}
+
            if (!safeFlag){
                safeFlag = Game.rooms[creep.memory.spawnRoomName].controller
            }
-                if (safeFlag && creep.hits < (creep.hitsMax*0.6)) {
+                if (safeFlag && creep.hits < (creep.hitsMax*0.2)) {
                     creep.heal(creep)
                     creep.moveTo(safeFlag);
                     creep.memory.flee = true
@@ -192,24 +181,27 @@ if (creep.room.name == "W41N40") {
     //        		var enemy = Game.rooms['E52S28'].controller
 //    if (creep.name == 'A1C' || creep.name == 'A1B') {var enemy = Game.getObjectById('5cb410a1e9517709f1d2715f'); if (!enemy){var enemy = Game.getObjectById('')}}
 //enemy = undefined
+                var attackResult
                 if (enemy && enemy.pos.getRangeTo(targetFlag) <= ar){
                     creep.say("go away!")
-//                if (enemy){
-                    console.log(creep.name+"enemy", creep.rangedAttack(enemy))
 
                     if (creep.getActiveBodyparts(RANGED_ATTACK) > 0){
-                        if(creep.rangedAttack(enemy) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(enemy, {visualizePathStyle: {stroke: '#00ffff'}});
-                    }
-                        if (creep.pos.inRangeTo(enemy, 1)){
-                           creep.moveTo(safeFlag)
+                        var rangedAttackResult = creep.rangedAttack(enemy)
+                        console.log(creep.name+" Ranged Attack ", rangedAttackResult)
+                        if(rangedAttackResult == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(enemy, {visualizePathStyle: {stroke: '#00ffff'}});
                         }
-                    } else {
-
-                        if(creep.attack(enemy) == ERR_NOT_IN_RANGE) {
+                        if ((creep.getActiveBodyparts(ATTACK) == 0) && creep.pos.inRangeTo(enemy, 1)){
+                           creep.moveTo(safeFlag)
+                        } else {
+                            creep.moveTo(enemy)
+                        }
+                    }
+                    attackResult = creep.attack(enemy)
+                    if(attackResult == ERR_NOT_IN_RANGE) {
                         creep.moveTo(enemy, {visualizePathStyle: {stroke: '#00ffff'}});
                     }
-                    }
+
 
                 } else if (structure){
                     if(creep.rangedAttack(structure) == ERR_NOT_IN_RANGE || creep.attack(structure) == ERR_NOT_IN_RANGE ) {
@@ -224,7 +216,14 @@ if (creep.room.name == "W41N40") {
                 }  else {
                     if(!creep.pos.inRangeTo(targetFlag,1))
                         { creep.moveTo(targetFlag, {visualizePathStyle: {stroke: '#00ffff'}}) }
-                         if (targetFlag == creep.room.controller && (Game.time%3 <= 5)) { if (creep.move(TOP)!= OK) if (creep.move(BOTTOM)!= OK) creep.move(LEFT)}
+                     if (targetFlag == creep.room.controller && (Game.time%3 <= 5)) { if (creep.move(TOP)!= OK) if (creep.move(BOTTOM)!= OK) creep.move(LEFT)}
+
+                }
+                if (attackResult != OK) {
+                    if (creep.getActiveBodyparts(HEAL) >=1 ) {
+                        creep.heal(creep)
+                    }
+
                 }
 
         } else {
@@ -235,6 +234,5 @@ if (creep.room.name == "W41N40") {
     }
 
 
-};
 
-module.exports = roleAttacker;
+module.exports = o;

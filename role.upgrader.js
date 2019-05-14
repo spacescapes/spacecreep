@@ -1,8 +1,17 @@
-var roleUpgrader = {
+var meta = require("role.meta")
 
-    /** @param {Creep} creep **/
-    run: function(creep) {
+var o = Object.create(meta);
 
+o.run = function(creep) {
+
+
+if (creep.memory.boost){
+
+    creep.say("boost" + this.boost(creep))
+    if (this.boost(creep)){
+        return(0)
+    }
+}
 //if (creep.room.name == "W42N35") {return(0); console.log("!!!!!!!!!!hello " + creep.name )}
 
 //        return(0)
@@ -90,7 +99,8 @@ if (creep.room.name == 'W48N54x' && creep.ticksToLive > 1000 && (!creep.body.som
 		    containerSite = linkSites[0]
 		}
 		if (!containerSite) {
-    		containerSite = creep.pos.findClosestByPath(FIND_HOSTILE_STRUCTURES, {
+//    		containerSite = creep.pos.findClosestByPath(FIND_HOSTILE_STRUCTURES, {
+    		containerSite = creep.pos.findClosestByPath(FIND_STRUCTURES, {
     		filter: function(object){
     			return ((object.structureType == STRUCTURE_EXTENSION && object.energy > 0 ) ||  ( object.structureType === STRUCTURE_CONTAINER && object.store.energy > 100) || ( object.structureType === STRUCTURE_TOWER && object.energy > 0) ||  ( object.structureType === STRUCTURE_TERMINAL && object.store.energy > 100) ||  ( object.structureType === STRUCTURE_STORAGE && object.store.energy > 1000) ||  ( object.structureType === STRUCTURE_LINK && object.energy > 0) ||  ( object.structureType === STRUCTURE_SPAWN && object.energy > 0) ||  ( object.structureType === STRUCTURE_POWER_SPAWN && object.energy > 0) || ( object.structureType === STRUCTURE_LAB && object.energy > 0) );
 //    			return ((object.structureType == STRUCTURE_EXTENSION && object.energy > 5 ) ||  ( object.structureType === STRUCTURE_TOWER && object.energy > 10) );
@@ -126,6 +136,5 @@ if (creep.room.name == 'W48N54x' && creep.ticksToLive > 1000 && (!creep.body.som
 
 
 	}
-};
 
-module.exports = roleUpgrader;
+module.exports = o;

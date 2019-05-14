@@ -1,9 +1,26 @@
 var meta = require("role.meta")
 
 var o = Object.create(meta);
-
     /** @param {Creep} creep **/
     o.run = function(creep) {
+        var minimum = 950000
+
+/*
+var  target = creep.room.storage
+    this.moveAndWithdraw(creep, target, RESOURCE_ENERGY)
+//    return(0)
+
+
+var target = creep.pos.findClosestByRange(FIND_STRUCTURES,
+    {filter: {structureType: STRUCTURE_TOWER}});
+
+creep.say(target)
+
+//    this.moveAndTransfer(creep, target, RESOURCE_ENERGY)
+this.moveAndTransfer(creep, target, RESOURCE_ENERGY)
+creep.transfer(target, RESOURCE_ENERGY)
+    return(0)
+*/
         var terminal = creep.room.terminal
         if (!terminal) {
             if (creep.room.storage){
@@ -18,7 +35,7 @@ var o = Object.create(meta);
         if (!creep.room.storage) return(0)
         var resourceList = Object.keys(creep.room.storage.store)
 
-        if ((_.sum(creep.room.storage.store) < 960000) &&  (_.sum(creep.carry)<creep.carryCapacity) ){
+        if ((_.sum(creep.room.storage.store) < (minimum + 10000)) &&  (_.sum(creep.carry)<creep.carryCapacity) ){
             var containerSites = creep.pos.findInRange(FIND_STRUCTURES, 1, {
 		    filter: function(object){
 		    	return ( ( object.structureType === STRUCTURE_LINK && object.energy > 0) );
@@ -33,7 +50,10 @@ var o = Object.create(meta);
     		    return(0)
     		}
         }
-        if (_.sum(creep.room.storage.store) >= (950000) && (_.sum(creep.room.terminal) <= 230000)){
+
+
+
+        if (_.sum(creep.room.storage.store) >= (minimum) && (_.sum(creep.room.terminal) <= 230000)){
 //            var max = _.max(creep.room.storage.store)
 //            var max = _.maxBy(creep.room.storage.store, function(o) { return o.n; });
 
@@ -56,7 +76,7 @@ var o = Object.create(meta);
             return(0)
         }
 
-        if (terminal && _.sum(terminal.store) >= 220000 && _.sum(creep.room.storage.store) <= 930000){
+        if (terminal && _.sum(terminal.store) >= 220000 && _.sum(creep.room.storage.store) <= (minimum - 20000)){
 
             if (_.sum(creep.carry)>0){
                 for(const resourceType in creep.carry) {

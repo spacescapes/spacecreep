@@ -132,15 +132,17 @@ module.exports = {
             })
             console.log("e:"+es.length)
           */
+            if (spawn){
 
-            for (var yoffset = -4; yoffset <= 5;yoffset++ ){
-                for (var xoffset = -5; xoffset <= 5;xoffset++ ){
-                    this.createExtensionGroup(room, spawn.pos.x+xoffset, spawn.pos.y+yoffset)
+                for (var yoffset = -4; yoffset <= 5;yoffset++ ){
+                    for (var xoffset = -5; xoffset <= 5;xoffset++ ){
+                        this.createExtensionGroup(room, spawn.pos.x+xoffset, spawn.pos.y+yoffset)
+
+                    }
 
                 }
 
             }
-
     /*
             room.find(FIND_SOURCES).forEach((object)=>{
                 this.createRoad(room, room.controller.pos, object.pos)
@@ -164,7 +166,7 @@ module.exports = {
 
                 room.find(FIND_CONSTRUCTION_SITES).forEach((c)=>{if ((c.structureType == STRUCTURE_ROAD || c.structureType == STRUCTURE_EXTENSION ) && c.progress < 1){c.remove() }})
 
-            }
+        }
 
         //    console.log("CONStruCT: "+ room.createConstructionSite(new RoomPosition(26,24, room.name), STRUCTURE_SPAWN))
         //return(0)

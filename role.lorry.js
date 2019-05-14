@@ -6,7 +6,7 @@ var o = Object.create(meta);
 o.run = function(creep) {
 
     creep.say("lorry")
-    if (creep.memory.spawnRoomName && creep.room.name != creep.memory.spawnRoomName) {creep.moveTo(Game.rooms[creep.memory.spawnRoomName].controller); return(0)}
+    if (creep.memory.spawnRoomName && Game.rooms[creep.memory.spawnRoomName] && creep.room.name != creep.memory.spawnRoomName) {creep.moveTo(Game.rooms[creep.memory.spawnRoomName].controller); return(0)}
 
     if (!creep.memory.harvestThreshold) creep.memory.harvestThreshold = 0
     if (creep.carry.energy == 0 ) creep.memory.work = false
@@ -19,7 +19,7 @@ o.run = function(creep) {
 //          var energy = energies.reduce((maxEnergy, nextEnergy) => (maxEnergy && maxEnergy.amount > nextEnergy.amount)?maxEnergy:nextEnergy, undefined)
             var energy = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {filter: function(object){return object.room.name == creep.room.name && object.resourceType==RESOURCE_ENERGY && object.amount >= 100}});
 //          energy = undefined
-            if (energy && creep.pos.getRangeTo(energy) <= 5){
+            if (energy && creep.pos.getRangeTo(energy) <= 6){
                 creep.say("L resource")
                 if (creep.pickup(energy) == ERR_NOT_IN_RANGE) { creep.moveTo(energy) } else {creep.memory.task = {}}
             } else {
@@ -29,7 +29,7 @@ o.run = function(creep) {
                         return (object.store.energy > 50 ) ;
                        }
                 });
-
+//containerSite = creep.room.terminal
                 if (!containerSite){
                     var containerSite = creep.pos.findClosestByPath(FIND_HOSTILE_STRUCTURES, {
             		filter: function(object){
@@ -217,7 +217,7 @@ o.run = function(creep) {
 //                    target = creep.pos.findClosestByPath(FIND_MY_SPAWNS);
             }
         }
-
+//target = creep.room.storage
         if(target) {
             creep.say("F "+ target.structureType)
             Memory.ta[target.id] = [Game.time, creep.name]
